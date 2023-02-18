@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewData["Title"] = "UserProfile";
+}
+
+
+@section styles{
+@*    <link href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />*@
+}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
+                </div>
+                <div class="card-body">
+                <table id="Profiles" class="table-hover table-striped table table-condensed" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th class="vertical"  style="height:86px">Reference</th>
+                            <th class="vertical"  style="height:86px">Extension</th>
+                            <th class="vertical"  style="height:86px">Aggression</th>
+                            <th class="vertical"  style="height:86px">Arousal</th>
+                            <th class="vertical"  style="height:86px">Atmosphere</th>
+                            <th class="vertical"  style="height:86px">ClStress</th>
+                            <th class="vertical"  style="height:108px">Concentration</th>
+                            <th class="vertical"  style="height:86px">Discomfort</th>
+                            <th class="vertical"  style="height:90px">Excitement</th>
+                            <th class="vertical"  style="height:86px">Hesitation</th>
+                            <th class="vertical"  style="height:86px">Imagination</th>
+                            <th class="vertical"  style="height:86px">Joy</th>
+                            <th class="vertical" style="height:108px">MentalEffort</th>
+                            <th class="vertical"  style="height:86px">Sad</th>
+                            <th class="vertical"  style="height:86px">Stress</th>
+                            <th class="vertical" style="height:108px">Uncertainty</th>
+                            <th class="vertical"  style="height:86px">Uneasy</th>
+                            <th class="vertical" style="height:112px">DiscomfortEnd</th>
+                            <th class="vertical" style="height:112px">DiscomfortStart</th>
+                            <th class="vertical"  style="height:86px">Tags</th>
+                            <th class="vertical" style="height:112px">NewTagsString</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @section Scripts{
+  @*  <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            if (!$.fn.dataTable.isDataTable('#Profiles')) {
+                table = $('#Profiles')
+                    .DataTable({
+                        "processing": true,
+                        "serverSide": true,
+                        "filter": true,
+                        "scrollX": true,
+                        "ajax": {
+                            "url": "/api/Profile",
+                            "type": "POST",
+                            "datatype": "json"
+                        },
+                        //"columnDefs": [{
+                        //    "targets": [0],
+                        //    "visible": false,
+                        //    "searchable": false
+                        //}],
+                        "columns": [
+                           
+                            { "data": "id", "name": "Id", "autoWidth": true },
+                            { "data": "reference", "name": "Reference", "autoWidth": true },
+                            { "data": "extension", "name": "Extension", "autoWidth": true },
+                            { "data": "aggression", "name": "Aggression", "autoWidth": true },
+                            { "data": "arousal", "name": "rousal", "autoWidth": true },
+                            { "data": "atmosphere", "name": "Atmosphere", "autoWidth": true },
+
+                            { "data": "clStress", "name": "ClStress", "autoWidth": true },
+                            { "data": "concentration", "name": "Concentration", "autoWidth": true },
+                            { "data": "discomfort", "name": "Discomfort", "autoWidth": true },
+
+                            { "data": "excitement", "name": "Excitement", "autoWidth": true },
+                            { "data": "hesitation", "name": "Hesitation", "autoWidth": true },
+                            { "data": "imagination", "name": "Imagination", "autoWidth": true },
+                            { "data": "joy", "name": "joy", "AutoWidth": true },
+
+                            { "data": "mentalEffort", "name": "MentalEffort", "autoWidth": true },
+                            { "data": "sad", "name": "sad", "AutoWidth": true },
+                            { "data": "stress", "name": "Stress", "autoWidth": true },
+                            { "data": "uncertainty", "name": "Uncertainty", "AutoWidth": true },
+
+
+                            { "data": "uneasy", "name": "Uneasy", "autoWidth": true },
+                            { "data": "discomfortEnd", "name": "DiscomfortEnd", "AutoWidth": true },
+                            { "data": "discomfortStart", "name": "DiscomfortStart", "autoWidth": true },
+                            { "data": "tags", "name": "Tags", "AutoWidth": true },
+                            { "data": "newTagsString", "name": "NewTagsString", "AutoWidth": true },
+                        ]
+                    });
+            }
+
+        })
+
+    </script>
+}

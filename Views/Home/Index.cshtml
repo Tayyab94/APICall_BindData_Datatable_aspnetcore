@@ -1,0 +1,221 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section styles{
+    @* <link href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />*@
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
+            </div>
+            <div class="card-body">
+                <table id="tblProfiles" class="table-hover table-striped table table-condensed" cellspacing="0" width="100%">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>Id</th>
+                            <th>Reference</th>
+                            <th>Extension</th>
+                            <th>Aggression</th>
+                            <th>Arousal</th>
+                            <th>Atmosphere</th>
+                            <th>ClStress</th>
+                            <th>Concentration</th>
+                            <th>Discomfort</th>
+                            <th>Excitement</th>
+                            <th>Hesitation</th>
+                            <th>Imagination</th>
+                            <th>Joy</th>
+                            <th>MentalEffort</th>
+                            <th>Sad</th>
+                            <th>Stress</th>
+                            <th>Uncertainty</th>
+                            <th>Uneasy</th>
+                            <th>DiscomfortEnd</th>
+                            <th>DiscomfortStart</th>
+                            <th>Tags</th>
+                            <th>NewTagsString</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    @*    <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            if (!$.fn.dataTable.isDataTable('#tblProfiles')) {
+                table = $('#tblProfiles')
+                    .DataTable({
+                        //"scrollX": true,
+                        //"responsive": false,
+                        //"scrollY": 300,
+                        "scrollX": true,
+                        "sAjaxSource": "/Home/GetAllProfiles",
+                        "bServerSide": true,
+                        "bProcessing": true,
+                        "bSearchable": true,
+                        'columnDefs': [{ 'orderable': false, 'targets': 2 }],
+                        "order": [[1, 'asc']],
+                       
+                        //scrollX: true,
+                        "language": {
+                            "emptyTable": "No record found.",
+                            "processing":
+                                '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+                        },
+                        "columns": [
+                            {
+
+                                "data": "id",
+                                "autoWidth": true,
+                                "searchable": true,
+                                //"render": function (id, type, full, meta) {
+                                //    return "<a href='/Loan/IndividualLoanDetail?id=" + full.customerId + "' class='btn-link' title='Detail'><i class='fa fa-info-circle'></i> " + full.customerName + "</a>"
+                                //}
+                            }, {
+
+                                "data": "reference",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+                                "data": "extension",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+                                "data": "aggression",
+                                "autoWidth": true,
+                                "searchable": true
+                            }, 
+                            {
+
+                                "data": "arousal",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "atmosphere",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "clStress",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "concentration",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "discomfort",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "excitement",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "hesitation",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "imagination",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "joy",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "mentalEffort",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "sad",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "stress",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "uncertainty",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "uneasy",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "discomfortEnd",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "discomfortStart",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "tags",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+                            {
+
+                                "data": "newTagsString",
+                                "autoWidth": true,
+                                "searchable": true
+                            },
+
+
+                        ]
+                    });
+            }
+
+        })
+
+    </script>
+}

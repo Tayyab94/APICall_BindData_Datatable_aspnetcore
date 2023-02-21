@@ -9,7 +9,7 @@ using System.Linq.Dynamic.Core;
 
 namespace Application.Controllers.api
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProfileController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace Application.Controllers.api
 
 
         [HttpPost]
-        public IActionResult GetProfiles()
+        public IActionResult GetProfiles([FromQuery] string name)
         {
             try
             {
@@ -36,16 +36,66 @@ namespace Application.Controllers.api
                 int recordsTotal = 0;
                 var customerData = (from tempcustomer in context.Profiles select tempcustomer);
 
-                
-                
-               //List<ProfileViewModel> profiles = new List<ProfileViewModel>();
 
-               // var query = context.Profiles.AsQueryable();
 
-               
+                //List<ProfileViewModel> profiles = new List<ProfileViewModel>();
+
+                // var query = context.Profiles.AsQueryable();
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    customerData = customerData.Where(s =>  s.Tags.Contains(name.ToLower()) || s.Extension.Contains(name.ToLower()) || s.CallDuration.Value.Equals(name));
+                    
+                }
+
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    customerData = customerData.Where(s => s.Id.ToString().Equals(searchValue));
+                    customerData = customerData.Where(s => s.Tags.Contains(searchValue.ToLower()) || s.Extension.Contains(searchValue.ToLower()) || s.CallDuration.Value.Equals(searchValue)|| s.CallSource.ToLower().Contains(searchValue.ToLower()) || s.CallDestination.ToLower().Contains(searchValue.ToLower()));
+                }
+
+                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                {
+                    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
+                }
+
+                recordsTotal = customerData.Count();
+              
+                var data = customerData.OrderByDescending(s=>s.Creation).Skip(skip).Take(pageSize).ToList();
+                var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
+                return Ok(jsonData);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public IActionResult GetProfiles1()
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+                var customerData = (from tempcustomer in context.Profiles select tempcustomer);
+
+
+
+                //List<ProfileViewModel> profiles = new List<ProfileViewModel>();
+
+                // var query = context.Profiles.AsQueryable();
+
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    customerData = customerData.Where(s => s.Id.ToString().Equals(searchValue) || s.Tags.Contains(searchValue.ToLower()) || s.Extension.Contains(searchValue.ToLower()));
                 }
 
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
@@ -65,7 +115,7 @@ namespace Application.Controllers.api
 
                 //}).ToList();
 
-                var data = customerData.Skip(skip).Take(pageSize).ToList();
+                var data = customerData.OrderByDescending(s => s.Creation).Skip(skip).Take(pageSize).ToList();
                 var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
                 return Ok(jsonData);
             }
@@ -74,5 +124,6 @@ namespace Application.Controllers.api
                 throw;
             }
         }
+
     }
 }

@@ -11,5 +11,12 @@ namespace Application.Entiries.DataContext
 
       public DbSet<Profile> Profiles { get; set; }  
         public DbSet<Segment> Segments { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+         
+            base.OnModelCreating(modelBuilder);
+
+        }
     }
 }

@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "ProfileS";
+}
+
+<div class="main-card mb-3 card">
+    <div class="card-body">
+        <h5 class="card-title">Inline</h5>
+        <div>
+
+            <div class="divider"></div>
+            <form class="row g-3">
+                <div class="col-auto">
+                    <label for="staticSearch" class="visually-hidden">Seaching</label>
+                    <input type="text" class="form-control" id="staticSearch">
+                </div>
+              @*  <div class="col-auto">
+                    <label for="inputPassword2" class="visually-hidden">Password</label>
+                    <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+                </div>*@
+                <div class="col-auto">
+                    <button type="button" id="searchBtn" class="btn btn-primary mb-3">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-2" id="profiles">
+
+    </div>
+
+
+
+@section Scripts{
+    @*  <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#searchBtn").click(function(){
+                    alert("btn");
+                    var searchvalue = $("#staticSearch").val()
+                    alert(searchvalue)
+
+                           $.ajax({
+                        url: "/Home/ListofProfiles?search="+searchvalue,
+                    type: "GET",
+                    data: {}
+                }).done(function (data) {
+                    //   alert(data);
+                    $("#profiles").html(data);
+                }).fail(function (data) {
+                });
+                })
+
+            })
+        </script>
+}
+
+
+       

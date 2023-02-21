@@ -1,0 +1,149 @@
+﻿@model Application.Entiries.ViewModels.ProfileListViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" style="width:1169px">
+            <div class="card-header">
+                <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
+            </div>
+            <div class="card-body">
+                <table data-toggle="table" data-sort-name="stargazers_count" data-sort-order="desc" class="table profiletbl table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th style="" data-field="Id"><div class="th-inner sortable both"> Id</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Reference"><div class="th-inner sortable both"> Reference</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Extension"><div class="th-inner sortable both"> Extension</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Creation"><div class="th-inner sortable both"> Creation</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Aggression"><div class="th-inner sortable both"> Aggression</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Arousal"><div class="th-inner sortable both"> Arousal</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Atmosphere"><div class="th-inner sortable both"> Atmosphere</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="ClStress"><div class="th-inner sortable both"> ClStress</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Concentration"><div class="th-inner sortable both"> Concentration</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Discomfort"><div class="th-inner sortable both"> Discomfort</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Excitement"><div class="th-inner sortable both"> Excitement</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Hesitation"><div class="th-inner sortable both"> Hesitation</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Imagination"><div class="th-inner sortable both"> Imagination</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Joy"><div class="th-inner sortable both"> Joy</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="MentalEffort"><div class="th-inner sortable both"> MentalEffort</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Sad"><div class="th-inner sortable both"> Sad</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Stress"><div class="th-inner sortable both"> Stress</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Uncertainty"><div class="th-inner sortable both"> Uncertainty</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Uneasy"><div class="th-inner sortable both"> Uneasy</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="DiscomfortEnd"><div class="th-inner sortable both"> DiscomfortEnd</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="DiscomfortStart"><div class="th-inner sortable both"> DiscomfortStart</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Tags"><div class="th-inner sortable both"> Tags</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="NewTagsString"><div class="th-inner sortable both"> NewTagsString</div><div class="fht-cell"></div></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ProfileList)
+                        {
+                            <tr data-index="0">
+                                <td>@item.Id</td>
+                                <td>@item.Reference</td>
+                                <td>@item.Extension</td>
+                                <td>@item.Creation</td>
+                                <td>@item.Aggression</td>
+                                <td>@item.Arousal</td>
+                                <td>@item.Atmosphere</td>
+                                <td>@item.ClStress</td>
+                                <td>@item.Concentration</td>
+                                <td>@item.Discomfort</td>
+                                <td>@item.Excitement</td>
+                                <td>@item.Hesitation</td>
+                                <td>@item.Imagination</td>
+                                <td>@item.Joy</td>
+                                <td>@item.MentalEffort</td>
+                                <td>@item.Sad</td>
+                                <td>@item.Stress</td>
+                                <td>@item.Uncertainty</td>
+                                <td>@item.Uneasy</td>
+                                <td>@item.DiscomfortEnd</td>
+                                <td>@item.DiscomfortStart</td>
+                                <td>@item.Tags</td>
+                                <td>@item.NewTagsString</td>
+
+
+                            </tr>
+                        }
+
+                </table>
+
+            </div>
+        <div class="card-footer">
+                <div class="fixed-table-pagination" style="">
+                    <nav class="" aria-label="Page navigation example">
+                        <ul class="pagination">
+
+                            @if (Model.Pager != null && Model.Pager.TotalPages > 1)
+                            {
+                                if (Model.Pager.CurrentPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a href="javascript:void(0);" class="page-link pageButtons btn" data-pageNo="@(Model.Pager.CurrentPage - 1)" aria-label="Previous">
+                                            <span aria-hidden="true">«</span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </a>
+                                    </li>
+                                   @* <li class="page-item"><button class="page-link pageButtons btn">Previous</button></li>*@
+                                }
+
+                                for (int pge = Model.Pager.StartPage; pge < Model.Pager.EndPage; pge++)
+                                {
+                                    string activeClass = Model.Pager.CurrentPage == pge ? "acive bg-info" : string.Empty;
+                                    
+                                    <li class="page-item">
+                                        <a href="javascript:void(0);" class="page-link @activeClass pageButtons btn" data-pageNo="@pge">@pge</a>
+                                    </li>
+                                }
+                                if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                                {
+
+                                    @*<li class="page-item"><a class="page-link pageButtons" href="@Url.Action("DoctorReviews","Dashboard",new { pageNo=(Model.Pager.CurrentPage + 1)})" data-pageNo="@(Model.Pager.CurrentPage + 1)">Next</a></li>*@
+                                   @* <li class="page-item"><button class="page-link pageButtons btn" >Next</button></li>*@
+                                    <li class="page-item">
+                                        <a href="javascript:void(0);" class="page-link  pageButtons btn" data-pageNo="@(Model.Pager.CurrentPage + 1)" aria-label="Next">
+                                            <span aria-hidden="true">»</span>
+                                            <span class="visually-hidden">Next</span>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                          
+                     
+                         
+                        </ul>
+                    </nav>
+                </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(".pageButtons").click(function () {
+        $.ajax({
+            url: '@Url.Action("ListofProfiles", "Home")',
+            data: {
+                pageNo: $(this).attr("data-pageNo"),
+                search:@Model.searchValue
+            }
+        }).done(function (result) {
+
+            $('#profiles').html(result);
+        }).fail(function () {
+
+        })
+    });
+
+
+</script>
+

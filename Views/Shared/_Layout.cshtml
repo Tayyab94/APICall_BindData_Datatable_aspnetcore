@@ -20,10 +20,20 @@
     @RenderSection("styles", required: false);
 
     <style type="text/css">
-       div.dataTables_wrapper {
+
+        div.dataTables_wrapper {
         width: 1150px;
        /* margin: 0 auto;*/
     }
+
+        .profiletbl {
+            display: block;
+            max-width: -moz-fit-content;
+            max-width: fit-content;
+            margin: 0 auto;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
 
 /*        table th {
            
@@ -47,6 +57,10 @@
        /*     width: 1%;*/
             white-space: nowrap;
         }
+
+
+
+
     </style>
 </head>
 <body>
@@ -73,7 +87,7 @@
     </header>*@
 
     <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
-       
+ 
         <div class="app-main">
            
             <div class="app-main__outer">

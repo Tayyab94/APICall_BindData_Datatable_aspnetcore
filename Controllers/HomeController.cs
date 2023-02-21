@@ -4,6 +4,8 @@ using Application.Entiries.DataContext;
 using Application.Entiries.DataTable;
 using Application.Entiries.ViewModels;
 using Application.Models;
+using Application.Models.HelperModels;
+using Application.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Controllers
@@ -11,11 +13,13 @@ namespace Application.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly AnalysisDbContext context;
-        public HomeController(ILogger<HomeController> logger, AnalysisDbContext context)
+        //private readonly AnalysisDbContext context;
+        private readonly IProfileRepository _profileRepository;
+        public HomeController(ILogger<HomeController> logger, AnalysisDbContext context,IProfileRepository profileRepository)
         {
-            _logger = logger;
-            this.context = context;
+            //_logger = logger;
+            //this.context = context;
+            _profileRepository = profileRepository;
         }
 
         public IActionResult Index()
@@ -23,74 +27,98 @@ namespace Application.Controllers
             return View();
         }
 
-        public ActionResult GetAllProfiles(JqueryDatatableParam param)
-        {
-            int totalCount = 0; int pageNo = 1;
-            if (param.iDisplayStart >= param.iDisplayLength)
-                pageNo = (param.iDisplayStart / param.iDisplayLength) + 1;
-            //List<ProfileViewModel> profiles = new List<ProfileViewModel>();
-            List<Profile> profiles = new List<Profile>();
+        //public ActionResult GetAllProfiles(JqueryDatatableParam param)
+        //{
+        //    int totalCount = 0; int pageNo = 1;
+        //    if (param.iDisplayStart >= param.iDisplayLength)
+        //        pageNo = (param.iDisplayStart / param.iDisplayLength) + 1;
+        //    //List<ProfileViewModel> profiles = new List<ProfileViewModel>();
+        //    List<Profile> profiles = new List<Profile>();
 
-            var query = context.Profiles.AsQueryable();
-            if (!string.IsNullOrEmpty(param.sSearch))
-            {
+        //    var query = context.Profiles.AsQueryable();
+        //    if (!string.IsNullOrEmpty(param.sSearch))
+        //    {
               
 
-                query = query.Where(s => s.Id.ToString().Contains(param.sSearch)
-                          ).AsQueryable();
-                totalCount = query.Count();
-            }
-            else
-            {
-                totalCount = query.Count();
+        //        query = query.Where(s => s.Id.ToString().Contains(param.sSearch)
+        //                  ).AsQueryable();
+        //        totalCount = query.Count();
+        //    }
+        //    else
+        //    {
+        //        totalCount = query.Count();
 
-            }
+        //    }
 
-            var sortColumnIndex = Convert.ToInt32(HttpContext.Request.Query["iSortCol_0"].ToString()); /*Convert.ToInt32(HttpContext.Request.QueryString["iSortCol_0"]);*/
-            var sortDirection = HttpContext.Request.Query["sSortDir_0"].ToString(); /*HttpContext.Request.QueryString["sSortDir_0"];*/
+        //    var sortColumnIndex = Convert.ToInt32(HttpContext.Request.Query["iSortCol_0"].ToString()); /*Convert.ToInt32(HttpContext.Request.QueryString["iSortCol_0"]);*/
+        //    var sortDirection = HttpContext.Request.Query["sSortDir_0"].ToString(); /*HttpContext.Request.QueryString["sSortDir_0"];*/
 
-            if (sortColumnIndex == 0)
-            {
-                query = sortDirection == "asc" ? query.OrderBy(c => c.Arousal) : query.OrderByDescending(c => c.Arousal);
-            }
-            else if (sortColumnIndex == 1)
-            {
-                query = sortDirection == "asc" ? query.OrderBy(c => c.Reference) : query.OrderByDescending(c => c.Reference);
-            }
-            else
-            {
-                query = sortDirection == "asc" ? query.OrderBy(c => c.Aggression) : query.OrderByDescending(c => c.Aggression);
-            }
+        //    if (sortColumnIndex == 0)
+        //    {
+        //        query = sortDirection == "asc" ? query.OrderBy(c => c.Arousal) : query.OrderByDescending(c => c.Arousal);
+        //    }
+        //    else if (sortColumnIndex == 1)
+        //    {
+        //        query = sortDirection == "asc" ? query.OrderBy(c => c.Reference) : query.OrderByDescending(c => c.Reference);
+        //    }
+        //    else
+        //    {
+        //        query = sortDirection == "asc" ? query.OrderBy(c => c.Aggression) : query.OrderByDescending(c => c.Aggression);
+        //    }
 
 
-            //profiles = query.Skip(param.iDisplayStart)
-            //             .Take(param.iDisplayLength).Select(x => new ProfileViewModel
-            //             {
-            //                 Id = x.Id,
-            //                 Aggression = x.Aggression,
+        //    //profiles = query.Skip(param.iDisplayStart)
+        //    //             .Take(param.iDisplayLength).Select(x => new ProfileViewModel
+        //    //             {
+        //    //                 Id = x.Id,
+        //    //                 Aggression = x.Aggression,
 
-            //                 Arousal = x.Arousal,
-            //                 Creation = x.Creation,
-            //                 Reference = x.Reference,
+        //    //                 Arousal = x.Arousal,
+        //    //                 Creation = x.Creation,
+        //    //                 Reference = x.Reference,
 
-            //             }).ToList();
+        //    //             }).ToList();
 
-            profiles = query.Skip(param.iDisplayStart)
-                       .Take(param.iDisplayLength).ToList();
-            return Json(new
-            {
-                param.sEcho,
-                iTotalRecords = totalCount,
-                iTotalDisplayRecords = totalCount,
-                aaData = profiles
-            });
+        //    profiles = query.Skip(param.iDisplayStart)
+        //               .Take(param.iDisplayLength).ToList();
+        //    return Json(new
+        //    {
+        //        param.sEcho,
+        //        iTotalRecords = totalCount,
+        //        iTotalDisplayRecords = totalCount,
+        //        aaData = profiles
+        //    });
 
-        }
+        //}
 
 
         public ActionResult UserProfile()
         {
             return View();
+        }
+
+        public ActionResult ProfileS()
+        {
+
+            return View();
+        }
+
+
+        public PartialViewResult ListofProfiles(int? pageNo, string search)
+        {
+            pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+
+            ProfileListViewModel model = new ProfileListViewModel();
+            model.searchValue = search;
+            var data = _profileRepository.GetAllProfiles(pageNo.Value, search);
+            model.ProfileList = data.Item1;
+
+            if (model.ProfileList != null)
+            {
+                model.Pager = new Pager(data.Item2, pageNo, 1);
+                return PartialView("_ListofProdiles", model);
+            }
+            return PartialView("_ListofProdiles", model);
         }
         public IActionResult Privacy()
         {

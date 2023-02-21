@@ -1,4 +1,5 @@
 using Application.Entiries.DataContext;
+using Application.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -9,6 +10,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AnalysisDbContext>(options =>
 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

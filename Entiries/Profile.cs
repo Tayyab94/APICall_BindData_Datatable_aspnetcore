@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NuGet.Packaging.Signing;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Application.Entiries
@@ -30,5 +31,13 @@ namespace Application.Entiries
         public double DiscomfortStart { get; set; }// vertical
         public string? Tags { get; set; }// horizontal
         public string NewTagsString { get; set; }// horizontal
+
+        public DateTime? StartCall { get; set; }
+        public DateTime? Finish { get; set;}
+
+        public string? CallSource { get; set;}
+        public string? CallDestination { get; set;}
+        public double? CallDuration { get; set; }
+
     }
 }

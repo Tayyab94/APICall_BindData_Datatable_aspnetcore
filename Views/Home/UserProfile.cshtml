@@ -1,85 +1,130 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "UserProfile";
 }
 
 
 @section styles{
-@*    <link href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />*@
+    @*    <link href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />*@
 }
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
+<div class="main-card mb-3 card">
+    <div class="card-body">
+        <div>
+            <div class="divider"></div>
+            <form class="row g-3">
+                <div class="col-auto">
+                    <label for="staticSearch" class="visually-hidden">Seaching</label>
+                    <input type="text" class="form-control" id="staticSearch" placeholder="Search By Tags/Extension">
                 </div>
-                <div class="card-body">
-                <table id="Profiles" class="table table-hover table-striped table-bordered dataTable dtr-inline" cellspacing="0" width="100%">
+              @*  <div class="col-auto">
+                    <label for="inputPassword2" class="visually-hidden">Password</label>
+                    <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+                </div>*@
+                <div class="col-auto">
+                    <button type="button" id="searchBtn" class="btn btn-primary mb-3">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
+            </div>
+            <div class="card-body">
+                <table id="Profiles" class="table Profiles table-hover table-striped table-bordered dataTable dtr-inline" cellspacing="0" width="100%">
                     <thead>
                         <tr style="height:120px">
-                            <th> <span> Id</span></th>
-                            <th ><span>Reference</span></th>
-                            <th ><span>Extension</span></th>
-                            <th ><span class="vertical">Aggression</span></th>
-                            <th ><span class="vertical">Arousal</span></th>
-                            <th ><span class="vertical">Atmosphere</span></th>
-                            <th ><span class="vertical">ClStress</span></th>
-                            <th ><span class="vertical">Concentration</span></th>
-                            <th ><span class="vertical">Discomfort</span></th>
-                            <th ><span class="vertical">Excitement</span></th>
-                            <th ><span class="vertical">Hesitation</span></th>
-                            <th ><span class="vertical">Imagination</span></th>
-                            <th ><span class="vertical">Joy</span></th>
-                            <th ><span class="vertical">MentalEffort</span></th>
-                            <th ><span class="vertical">Sad</span></th>
-                            <th ><span class="vertical">Stress</span></th>
-                            <th ><span class="vertical">Uncertainty</span></th>
-                            <th ><span class="vertical">Uneasy</span></th>
-                            <th ><span class="vertical">DiscomfortEnd</span></th>
-                            <th ><span class="vertical">DiscomfortStart</span></th>
-                            <th ><span class="vertical">Tags</span></th>
-                            <th ><span class="vertical">NewTagsString</span></th>
+                            <th> <span> Actions</span></th>
+                            <th><span>Reference</span></th>
+                            <th><span>Extension</span></th>
+                            <th><span>Creation</span></th>
+                            <th><span class="vertical">Aggression</span></th>
+                            <th><span class="vertical">Arousal</span></th>
+                            <th><span class="vertical">Atmosphere</span></th>
+                            <th><span class="vertical">ClStress</span></th>
+                            <th><span class="vertical">Concentration</span></th>
+                            <th><span class="vertical">Discomfort</span></th>
+                            <th><span class="vertical">Excitement</span></th>
+                            <th><span class="vertical">Hesitation</span></th>
+                            <th><span class="vertical">Imagination</span></th>
+                            <th><span class="vertical">Joy</span></th>
+                            <th><span class="vertical">MentalEffort</span></th>
+                            <th><span class="vertical">Sad</span></th>
+                            <th><span class="vertical">Stress</span></th>
+                            <th><span class="vertical">Uncertainty</span></th>
+                            <th><span class="vertical">Uneasy</span></th>
+                            <th><span class="vertical">DiscomfortEnd</span></th>
+                            <th><span class="vertical">DiscomfortStart</span></th>
+                            <th><span class="vertical">Tags</span></th>
+                            <th><span class="vertical">NewTagsString</span></th>
                         </tr>
                     </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
 
-    @section Scripts{
-  @*  <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
+@section Scripts{
+    @*  <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
 
     <script type="text/javascript">
         $(document).ready(function () {
 
+            $("#searchBtn").click(function(){
+                var searchvalue = $("#staticSearch").val()
+             
 
-            if (!$.fn.dataTable.isDataTable('#Profiles')) {
+                GetData($("#staticSearch").val());
+                $("#staticSearch").val("");
+
+            })
+                
+        })
+        
+        function GetData(searchingValue)
+        {
+        
+            if ($.fn.DataTable.isDataTable('#Profiles')) {
+                $('#Profiles').DataTable().destroy();
+            }
+
+            if (!$.fn.dataTable.isDataTable('#Profiles'))
+            {
                 table = $('#Profiles')
                     .DataTable({
                         "processing": true,
                         "serverSide": true,
                         "filter": true,
                         "scrollX": true,
+                        'columnDefs': [{ 'orderable': false, 'targets': 0 }],
                         "ajax": {
-                            "url": "/api/Profile",
+                            "url": "/api/Profile/GetProfiles?name=" + searchingValue,
                             "type": "POST",
                             "datatype": "json"
                         },
-                        //"columnDefs": [{
-                        //    "targets": [0],
-                        //    "visible": false,
-                        //    "searchable": false
-                        //}],
                         "columns": [
-                           
-                            { "data": "id", "name": "Id", "autoWidth": true },
+
+                            {
+                                "data": "id", "name": "Id", "autoWidth": true, "render": function (id, type, full, meta) {
+                                    
+                                    return "<button type='button' class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + full.id + " ><i class='fa fa-user'></i></button>";
+
+                                }
+                            },
                             { "data": "reference", "name": "Reference", "autoWidth": true },
                             { "data": "extension", "name": "Extension", "autoWidth": true },
+                            {
+                                "data": "creation", "name": "Creation", "autoWidth": true, "createdCell": function (td, cellData, rowData, row, col) {
+                                    var date = new Date(cellData);
+                                        $(td).html(date.toLocaleDateString());
+                                }
+                            },
                             { "data": "aggression", "name": "Aggression", "autoWidth": true },
                             { "data": "arousal", "name": "rousal", "autoWidth": true },
                             { "data": "atmosphere", "name": "Atmosphere", "autoWidth": true },
@@ -104,11 +149,23 @@
                             { "data": "discomfortStart", "name": "DiscomfortStart", "autoWidth": true },
                             { "data": "tags", "name": "Tags", "AutoWidth": true },
                             { "data": "newTagsString", "name": "NewTagsString", "AutoWidth": true },
-                        ]
+                        ], "initComplete": function () {
+                            $('#Profiles tbody').on('click', 'tr td.dt-view', function (e) {
+
+                                const clickedElement = $(e.target);
+                                var tr = clickedElement.closest('tr');
+                                var row = cmeTable.row(tr);
+                                var record = row.data();
+
+                                self.updateDocument(record);
+
+                            });
+                        }
                     });
             }
+           
+            searchingValue="";
 
-        })
-
+        }
     </script>
 }

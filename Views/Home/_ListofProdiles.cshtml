@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="card" style="width:1169px">
+        <div class="card" style="width:1172px">
             <div class="card-header">
                 <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
             </div>
@@ -74,54 +74,44 @@
                         }
 
                 </table>
+                <nav class="" aria-label="Page navigation example " style="margin-top:20px">
+                    <ul class="pagination">
 
-            </div>
-        <div class="card-footer">
-                <div class="fixed-table-pagination" style="">
-                    <nav class="" aria-label="Page navigation example">
-                        <ul class="pagination">
-
-                            @if (Model.Pager != null && Model.Pager.TotalPages > 1)
+                        @if (Model.Pager != null && Model.Pager.TotalPages > 1)
+                        {
+                            if (Model.Pager.CurrentPage > 1)
                             {
-                                if (Model.Pager.CurrentPage > 1)
-                                {
-                                    <li class="page-item">
-                                        <a href="javascript:void(0);" class="page-link pageButtons btn" data-pageNo="@(Model.Pager.CurrentPage - 1)" aria-label="Previous">
-                                            <span aria-hidden="true">«</span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </a>
-                                    </li>
-                                   @* <li class="page-item"><button class="page-link pageButtons btn">Previous</button></li>*@
-                                }
-
-                                for (int pge = Model.Pager.StartPage; pge < Model.Pager.EndPage; pge++)
-                                {
-                                    string activeClass = Model.Pager.CurrentPage == pge ? "acive bg-info" : string.Empty;
-                                    
-                                    <li class="page-item">
-                                        <a href="javascript:void(0);" class="page-link @activeClass pageButtons btn" data-pageNo="@pge">@pge</a>
-                                    </li>
-                                }
-                                if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
-                                {
-
-                                    @*<li class="page-item"><a class="page-link pageButtons" href="@Url.Action("DoctorReviews","Dashboard",new { pageNo=(Model.Pager.CurrentPage + 1)})" data-pageNo="@(Model.Pager.CurrentPage + 1)">Next</a></li>*@
-                                   @* <li class="page-item"><button class="page-link pageButtons btn" >Next</button></li>*@
-                                    <li class="page-item">
-                                        <a href="javascript:void(0);" class="page-link  pageButtons btn" data-pageNo="@(Model.Pager.CurrentPage + 1)" aria-label="Next">
-                                            <span aria-hidden="true">»</span>
-                                            <span class="visually-hidden">Next</span>
-                                        </a>
-                                    </li>
-                                }
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link pageButtons btn" data-pageNo="@(Model.Pager.CurrentPage - 1)" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </a>
+                                </li>
                             }
-                          
-                     
-                         
-                        </ul>
-                    </nav>
-                </div>
-        </div>
+
+                            for (int pge = Model.Pager.StartPage; pge < Model.Pager.EndPage; pge++)
+                            {
+                                string activeClass = Model.Pager.CurrentPage == pge ? "acive bg-info" : string.Empty;
+
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link @activeClass pageButtons btn" data-pageNo="@pge">@pge</a>
+                                </li>
+                            }
+                            if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                            {
+
+                                <li class="page-item">
+                                    <a href="javascript:void(0);" class="page-link  pageButtons btn" data-pageNo="@(Model.Pager.CurrentPage + 1)" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                        <span class="visually-hidden">Next</span>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </nav>
+            </div>
+        
         </div>
     </div>
 </div>

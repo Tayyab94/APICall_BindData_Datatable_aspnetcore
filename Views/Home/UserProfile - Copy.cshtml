@@ -5,7 +5,7 @@
 
 @section styles{
     @*    <link href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />*@
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <style>
 
         ::-webkit-scrollbar {
@@ -18,9 +18,9 @@
             border-radius: 10px;
         }
 
-        /*        .Profiles_filter {
-                    display:none !important;
-                }*/
+/*        .Profiles_filter {
+            display:none !important;
+        }*/
     </style>
 }
 <div class="main-card mb-3 card">
@@ -38,12 +38,12 @@
                 </div>
                 <div class="col-auto">
                     <label for="staticSearch" class="visually-hidden">Seaching</label>
-                    <input type="text" class="form-control" id="staticSearch" placeholder="Search Call Source/Destination">
+                    <input type="text" class="form-control" id="staticSearch" placeholder="Search By Tags/Extension">
                 </div>
 
                 <div class="col-auto">
                     <label for="staticSearch" class="visually-hidden">Date</label>
-                    @* <input type="text" class="form-control" id="staticSearch" placeholder="Select Date">*@
+                   @* <input type="text" class="form-control" id="staticSearch" placeholder="Select Date">*@
                     <input type="text" class="form-control" name="daterange" />
                     <input type="hidden" id="hideDates" />
                 </div>
@@ -112,7 +112,7 @@
     @*  <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
+   
     <script type="text/javascript">
         $(document).ready(function () {
             var today = new Date();
@@ -120,36 +120,34 @@
             var mm = String(today.getMonth() + 1).padStart(2, '0');
             var dd = String(today.getDate()).padStart(2, '0');
             var formattedDate = yyyy + '-' + mm + '-' + dd;
-            $("#hideDates").val(formattedDate + " " + formattedDate)
-            var dd = "";
+            $("#hideDates").val(formattedDate + " " + formattedDate);
+            $("#tags").val("");
+            $("#extensions").val("");
+        var dd= "";
             $('input[name="daterange"]').daterangepicker({
                 opens: 'left',
                 startDate: "01/01/2023",
             }, function (start, end, label) {
                 console.warn("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-                dd = start.format('YYYY-MM-DD') + " " + end.format('YYYY-MM-DD');
+                    dd = start.format('YYYY-MM-DD') + " " + end.format('YYYY-MM-DD');
                 $("#hideDates").val(dd);
             });
-
+      
 
             $("#searchBtn").click(function () {
                 var searchvalue = $("#staticSearch").val()
-               
-                 if ($("#tags").val()=== "" || $("#tags").val() == null) {
-                    alert("Enter Tags")
+                if (searchvalue == "" || searchvalue == null) {
                     return;
-                }
-                else if ($("#extensions").val() == "" || $("#extensions").val() == null) {
-                    alert("Enter Extensions")
-                    return;
-                } else if (searchvalue == "" || searchvalue == null) {
-                    alert("enter Search")
-                    return;
-                }
-                else {
-                    var newsearch = $("#tags").val() + "," + $("#extensions").val() + "," + $("#staticSearch").val();
-                    alert(newsearch);
-                    GetData(newsearch, $("#hideDates").val());
+                } else {
+                    var res = { name: $("#staticSearch").val(), dt: $("#hideDates").val(), tags: $("#tags").val(),extension:$("#extensions").val() }
+                    var ddt=new Object();
+                    ddt.name = $("#staticSearch").val();
+                    ddt.dt = $("#hideDates").val();
+                    ddt.tags = $("#tags").val();
+                    ddt.extension= $("#extensions").val()
+                    console.warn(ddt);
+                    console.warn(JSON.stringify(ddt))
+                    GetData(JSON.stringify(ddt))
                     $("#staticSearch").val("");
                     $(".profileCardBody").css("overflow-x", "hidden")
                     $(".Profiles_filter").css("display", "none !important")
@@ -159,11 +157,14 @@
 
         })
 
-        function GetData(searchingValue, date) {
-            alert(date)
+        function GetData(jsonData) {
+
+            //var data = JSON.stringify({ "Name": searchingValue, "Dt": date, "Tags": tags, "Extension": extensions })
+            var data = JSON.stringify(jsonData)
             if ($.fn.DataTable.isDataTable('#Profiles')) {
                 $('#Profiles').DataTable().destroy();
             }
+          
 
             if (!$.fn.dataTable.isDataTable('#Profiles')) {
                 table = $('#Profiles')
@@ -174,9 +175,12 @@
                         "scrollX": true,
                         'columnDefs': [{ 'orderable': false, 'targets': 0 }],
                         "ajax": {
-                            "url": "/api/Profile/GetProfiles?name=" + searchingValue + "&dt=" + date,
-                            "type": "POST",
-                            "datatype": "json"
+                            "url": "/api/Profile/GetProfiles",
+                            "type": 'post',
+                            "dataType": 'json',
+                            "contentType": 'application/json',
+                            "data": jsonData,
+                           
                         },
                         "columns": [
 

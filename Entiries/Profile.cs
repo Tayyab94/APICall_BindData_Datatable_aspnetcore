@@ -33,7 +33,7 @@ namespace Application.Entiries
         public string NewTagsString { get; set; }// horizontal
 
         public DateTime? StartCall { get; set; }
-        public DateTime? Finish { get; set;}
+        public DateTime? FinishCall { get; set;} // Its a FinishCall
 
         public string? CallSource { get; set;}
         public string? CallDestination { get; set;}

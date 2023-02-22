@@ -5,6 +5,23 @@
 
 @section styles{
     @*    <link href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />*@
+     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <style>
+
+        ::-webkit-scrollbar {
+            height: 5px;
+            background-color: #f2f2f2;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #aaa;
+            border-radius: 10px;
+        }
+
+/*        .Profiles_filter {
+            display:none !important;
+        }*/
+    </style>
 }
 <div class="main-card mb-3 card">
     <div class="card-body">
@@ -15,9 +32,16 @@
                     <label for="staticSearch" class="visually-hidden">Seaching</label>
                     <input type="text" class="form-control" id="staticSearch" placeholder="Search By Tags/Extension">
                 </div>
-              @*  <div class="col-auto">
-                    <label for="inputPassword2" class="visually-hidden">Password</label>
-                    <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+
+                <div class="col-auto">
+                    <label for="staticSearch" class="visually-hidden">Date</label>
+                   @* <input type="text" class="form-control" id="staticSearch" placeholder="Select Date">*@
+                    <input type="text" class="form-control" name="daterange" />
+                    <input type="hidden" id="hideDates" />
+                </div>
+                @*  <div class="col-auto">
+                <label for="inputPassword2" class="visually-hidden">Password</label>
+                <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
                 </div>*@
                 <div class="col-auto">
                     <button type="button" id="searchBtn" class="btn btn-primary mb-3">Submit</button>
@@ -32,7 +56,7 @@
             <div class="card-header">
                 <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
             </div>
-            <div class="card-body">
+            <div class="card-body profileCardBody" style="width: 100%;overflow-x: scroll;">
                 <table id="Profiles" class="table Profiles table-hover table-striped table-bordered dataTable dtr-inline" cellspacing="0" width="100%">
                     <thead>
                         <tr style="height:120px">
@@ -59,6 +83,12 @@
                             <th><span class="vertical">DiscomfortStart</span></th>
                             <th><span class="vertical">Tags</span></th>
                             <th><span class="vertical">NewTagsString</span></th>
+                            <th><span class="vertical">Call Destination</span></th>
+                            <th><span class="vertical">Call Source</span></th>
+                            <th><span>Call Start</span></th>
+                            <th><span>Call End</span></th>
+                            <th><span>Call Duration</span></th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -72,30 +102,50 @@
 
 @section Scripts{
     @*  <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+   
     <script type="text/javascript">
         $(document).ready(function () {
+            var today = new Date();
+            var yyyy = today.getFullYear();
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var dd = String(today.getDate()).padStart(2, '0');
+            var formattedDate = yyyy + '-' + mm + '-' + dd;
+            $("#hideDates").val(formattedDate + " " + formattedDate)
+        var dd= "";
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left',
+                startDate: "01/01/2023",
+            }, function (start, end, label) {
+                console.warn("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                    dd = start.format('YYYY-MM-DD') + " " + end.format('YYYY-MM-DD');
+                $("#hideDates").val(dd);
+            });
+      
 
-            $("#searchBtn").click(function(){
+            $("#searchBtn").click(function () {
                 var searchvalue = $("#staticSearch").val()
-             
-
-                GetData($("#staticSearch").val());
-                $("#staticSearch").val("");
+                if (searchvalue == "" || searchvalue == null) {
+                    return;
+                } else {
+                    GetData($("#staticSearch").val(), $("#hideDates").val());
+                    $("#staticSearch").val("");
+                    $(".profileCardBody").css("overflow-x", "hidden")
+                    $(".Profiles_filter").css("display", "none !important")
+                }
 
             })
-                
+
         })
-        
-        function GetData(searchingValue)
-        {
-        
+
+        function GetData(searchingValue,date) {
+            alert(date)
             if ($.fn.DataTable.isDataTable('#Profiles')) {
                 $('#Profiles').DataTable().destroy();
             }
 
-            if (!$.fn.dataTable.isDataTable('#Profiles'))
-            {
+            if (!$.fn.dataTable.isDataTable('#Profiles')) {
                 table = $('#Profiles')
                     .DataTable({
                         "processing": true,
@@ -104,7 +154,7 @@
                         "scrollX": true,
                         'columnDefs': [{ 'orderable': false, 'targets': 0 }],
                         "ajax": {
-                            "url": "/api/Profile/GetProfiles?name=" + searchingValue,
+                            "url": "/api/Profile/GetProfiles?name=" + searchingValue+"&dt="+date,
                             "type": "POST",
                             "datatype": "json"
                         },
@@ -112,7 +162,7 @@
 
                             {
                                 "data": "id", "name": "Id", "autoWidth": true, "render": function (id, type, full, meta) {
-                                    
+
                                     return "<button type='button' class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + full.id + " ><i class='fa fa-user'></i></button>";
 
                                 }
@@ -122,11 +172,11 @@
                             {
                                 "data": "creation", "name": "Creation", "autoWidth": true, "createdCell": function (td, cellData, rowData, row, col) {
                                     var date = new Date(cellData);
-                                        $(td).html(date.toLocaleDateString());
+                                    $(td).html(date.toLocaleDateString());
                                 }
                             },
                             { "data": "aggression", "name": "Aggression", "autoWidth": true },
-                            { "data": "arousal", "name": "rousal", "autoWidth": true },
+                            { "data": "arousal", "name": "Arousal", "autoWidth": true },
                             { "data": "atmosphere", "name": "Atmosphere", "autoWidth": true },
 
                             { "data": "clStress", "name": "ClStress", "autoWidth": true },
@@ -149,6 +199,12 @@
                             { "data": "discomfortStart", "name": "DiscomfortStart", "autoWidth": true },
                             { "data": "tags", "name": "Tags", "AutoWidth": true },
                             { "data": "newTagsString", "name": "NewTagsString", "AutoWidth": true },
+
+                            { "data": "callDestination", "name": "CallDestination", "autoWidth": true },
+                            { "data": "callSource", "name": "CallSource", "AutoWidth": true },
+                            { "data": "startCall", "name": "StartCall", "autoWidth": true },
+                            { "data": "finishCall", "name": "FinishCall", "AutoWidth": true },
+                            { "data": "callDuration", "name": "CallDuration", "AutoWidth": true },
                         ], "initComplete": function () {
                             $('#Profiles tbody').on('click', 'tr td.dt-view', function (e) {
 
@@ -163,8 +219,8 @@
                         }
                     });
             }
-           
-            searchingValue="";
+
+            searchingValue = "";
 
         }
     </script>

@@ -27,6 +27,7 @@ namespace Application.Controllers
             return View();
         }
 
+        #region Controller Datatable call, Dont remove
         //public ActionResult GetAllProfiles(JqueryDatatableParam param)
         //{
         //    int totalCount = 0; int pageNo = 1;
@@ -38,7 +39,7 @@ namespace Application.Controllers
         //    var query = context.Profiles.AsQueryable();
         //    if (!string.IsNullOrEmpty(param.sSearch))
         //    {
-              
+
 
         //        query = query.Where(s => s.Id.ToString().Contains(param.sSearch)
         //                  ).AsQueryable();
@@ -91,6 +92,7 @@ namespace Application.Controllers
 
         //}
 
+        #endregion  
 
         public ActionResult UserProfile()
         {

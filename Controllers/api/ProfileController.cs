@@ -21,8 +21,17 @@ namespace Application.Controllers.api
 
 
         [HttpPost]
-        public IActionResult GetProfiles([FromQuery] string name)
+        public IActionResult GetProfiles([FromQuery] string name, string dt)
         {
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+            if (!string.IsNullOrEmpty(dt))
+            {
+                string[] dates = dt.Split(' ');
+                 startDate = Convert.ToDateTime(dates[0]).Date.AddDays(1);
+                 endDate = Convert.ToDateTime(dates[1]).Date;
+            }
+          
             try
             {
                 var draw = Request.Form["draw"].FirstOrDefault();
@@ -34,33 +43,50 @@ namespace Application.Controllers.api
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
-                var customerData = (from tempcustomer in context.Profiles select tempcustomer);
+                var customerData = (from tempcustomer in context.Profiles select tempcustomer).AsQueryable();
 
 
 
                 //List<ProfileViewModel> profiles = new List<ProfileViewModel>();
 
                 // var query = context.Profiles.AsQueryable();
+                //if (!string.IsNullOrEmpty(dt))
+                //{
+                //    customerData = customerData.Where(s => (s.Creation.Date <= startDate && s.Creation.Date >= endDate)).AsQueryable();
+                //}
 
                 if (!string.IsNullOrEmpty(name))
                 {
-                    customerData = customerData.Where(s =>  s.Tags.Contains(name.ToLower()) || s.Extension.Contains(name.ToLower()) || s.CallDuration.Value.Equals(name));
-                    
-                }
+                    customerData = customerData.Where(s => s.Tags.Contains(name.ToLower()) || s.Extension.Contains(name.ToLower()) || s.CallDuration.Value.Equals(name)).Where(s=>s.Creation.Date>= startDate.Date && s.Creation.Date<=endDate.Date).AsQueryable();
 
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    customerData = customerData.Where(s => s.Tags.Contains(searchValue.ToLower()) || s.Extension.Contains(searchValue.ToLower()) || s.CallDuration.Value.Equals(searchValue)|| s.CallSource.ToLower().Contains(searchValue.ToLower()) || s.CallDestination.ToLower().Contains(searchValue.ToLower()));
                 }
+                //if (!string.IsNullOrEmpty(name))
+                //{
+                //    customerData = customerData.Where(s =>  s.Tags.ToLower().Contains(name.ToLower()) || s.Extension.ToLower().Contains(name.ToLower()) ||
+                //                        s.CallDuration.Value.Equals(name) ||( s.CallSource.ToLower().Equals(name.ToLower()) && !string.IsNullOrEmpty(s.CallSource)) 
+                //                        || (s.CallDestination.ToLower().Equals(name.ToLower())&& !string.IsNullOrEmpty(s.CallDestination)));
+                    
+                //}
+
+             
+
+                //if (!string.IsNullOrEmpty(searchValue))
+                //{
+                //    customerData = customerData.Where(s => s.Tags.Contains(searchValue.ToLower()) || s.Extension.Contains(searchValue.ToLower()) || s.CallDuration.Value.Equals(searchValue)|| s.CallSource.ToLower().Contains(searchValue.ToLower()) || s.CallDestination.ToLower().Contains(searchValue.ToLower()));
+                //}
 
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
-                    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
+                    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection).AsQueryable();
+                }
+                else
+                {
+                    customerData = customerData.OrderByDescending(s => s.Creation).AsQueryable();
                 }
 
                 recordsTotal = customerData.Count();
               
-                var data = customerData.OrderByDescending(s=>s.Creation).Skip(skip).Take(pageSize).ToList();
+                var data = customerData.Skip(skip).Take(pageSize).ToList();
                 var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
                 return Ok(jsonData);
             }

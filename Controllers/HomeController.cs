@@ -94,14 +94,23 @@ namespace Application.Controllers
 
         #endregion  
 
-        public ActionResult UserProfile()
+        public async Task<ActionResult> UserProfile()
         {
+            var data =await _profileRepository.ExtensionsList();
+            ViewBag.extensionList=data;
             return View();
         }
 
         public ActionResult ProfileS()
         {
 
+            return View();
+        }
+
+        public async Task<ActionResult> AllProfilesList()
+        {
+            var data = await _profileRepository.ExtensionsList();
+            ViewBag.extensionList = data;
             return View();
         }
 

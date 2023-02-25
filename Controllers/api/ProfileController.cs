@@ -64,15 +64,15 @@ namespace Application.Controllers.api
 
                 //}
 
-                if (!string.IsNullOrEmpty(newSearches[0]) || !string.IsNullOrEmpty(newSearches[1]) || !string.IsNullOrEmpty(newSearches[2]))
-                {
-                    customerData = customerData.Where(s => (s.Tags.ToLower().Contains(newSearches[0].ToLower()) 
-                                         && s.Extension.ToLower().Contains(newSearches[1].ToLower()) &&
-                    (
-                    s.CallSource.ToLower().Contains(newSearches[2].ToLower()) ||
-                    s.CallDestination.ToLower().Contains(newSearches[2].ToLower())))).Where(s => s.Creation.Date >= startDate.Date && s.Creation.Date <= endDate.Date).AsQueryable();
+                //if (!string.IsNullOrEmpty(newSearches[0]) || !string.IsNullOrEmpty(newSearches[1]) || !string.IsNullOrEmpty(newSearches[2]))
+                //{
+                //    customerData = customerData.Where(s => (s.Tags.ToLower().Contains(newSearches[0].ToLower()) 
+                //                         && s.Extension.ToLower().Contains(newSearches[1].ToLower()) &&
+                //    (
+                //    s.CallSource.ToLower().Contains(newSearches[2].ToLower()) ||
+                //    s.CallDestination.ToLower().Contains(newSearches[2].ToLower())))).Where(s => s.Creation.Date >= startDate.Date && s.Creation.Date <= endDate.Date).AsQueryable();
 
-                }
+                //}
 
                 //if (!string.IsNullOrEmpty(newSearches[0]) || !string.IsNullOrEmpty(newSearches[1]) || !string.IsNullOrEmpty(newSearches[2]))
                 //{
@@ -81,22 +81,40 @@ namespace Application.Controllers.api
 
                 //}
 
-                //if (!string.IsNullOrEmpty(newSearches[0]))
-                //{
-                //    customerData = customerData.Where(s => newSearches[0].ToLower().Contains(s.Tags.ToLower())).AsQueryable();
+                if (!string.IsNullOrEmpty(newSearches[0]))
+                {
+                    customerData = customerData.Where(s => newSearches[0].ToLower().Contains(s.Tags.ToLower())).AsQueryable();
 
-                //}
-                //if (!string.IsNullOrEmpty(newSearches[1]))
-                //{
-                //    customerData = customerData.Where(s =>  newSearches[1].ToLower().Contains(s.Extension.ToLower())).AsQueryable();
+                }
+                if (!string.IsNullOrEmpty(newSearches[1]))
+                {
+                    customerData = customerData.Where(s => newSearches[1].ToLower().Contains(s.Extension.ToLower())).AsQueryable();
 
-                //}
+                }
                 //if (!string.IsNullOrEmpty(newSearches[2]))
                 //{
-                //    customerData = customerData.Where(s =>(s.CallDuration.Value.Equals(Convert.ToDouble(newSearches[2])) || newSearches[2].ToLower().Contains(s.CallSource.ToLower()) || newSearches[2].ToLower().Contains(s.CallDestination.ToLower()))).Where(s => s.Creation.Date >= startDate.Date && s.Creation.Date <= endDate.Date).AsQueryable();
+                //    customerData = customerData.Where(s => (newSearches[2].ToLower().Contains(s.CallSource.ToLower()) || newSearches[2].ToLower().Contains(s.CallDestination.ToLower()))).Where(s => s.Creation.Date >= startDate.Date && s.Creation.Date <= endDate.Date).AsQueryable();
 
                 //}
+                if (!string.IsNullOrEmpty(newSearches[2]))
+                {
+                    customerData = customerData.Where(s => (newSearches[2].ToLower().Contains(s.CallSource.ToLower()) || newSearches[2].ToLower().Contains(s.CallDestination.ToLower()))).AsQueryable();
 
+                }
+                if (!string.IsNullOrEmpty(newSearches[3]))
+                {
+                    customerData = customerData.Where(s => s.CallDuration.Value.Equals(double.Parse(newSearches[3]))).AsQueryable();
+
+                }
+
+                if (startDate != endDate)
+                {
+                    customerData = customerData.Where(s => s.Creation.Date >= startDate.Date && s.Creation.Date <= endDate.Date).AsQueryable();
+                }
+                else
+                {
+                    customerData = customerData.Where(s => s.Creation.Date >= DateTime.Now.Date && s.Creation.Date <= DateTime.Now.Date).AsQueryable();
+                }
 
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
@@ -112,6 +130,67 @@ namespace Application.Controllers.api
                 var data = customerData.Skip(skip).Take(pageSize).ToList();
                 var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
                 return Ok(jsonData);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+        [HttpPost]
+        public IActionResult GetProfilesAll([FromQuery] string name, string dt)
+        {
+            string[] newSearches = name.Split(',');
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+            if (!string.IsNullOrEmpty(dt))
+            {
+                string[] dates = dt.Split(' ');
+                startDate = Convert.ToDateTime(dates[0]).Date;
+                endDate = Convert.ToDateTime(dates[1]).Date;
+            }
+
+            try
+            {
+                var customerData = (from tempcustomer in context.Profiles select tempcustomer).AsQueryable();
+
+                if (!string.IsNullOrEmpty(newSearches[0]))
+                {
+                    customerData = customerData.Where(s => newSearches[0].ToLower().Contains(s.Tags.ToLower())).AsQueryable();
+
+                }
+                if (!string.IsNullOrEmpty(newSearches[1]))
+                {
+                    customerData = customerData.Where(s => newSearches[1].ToLower().Contains(s.Extension.ToLower())).AsQueryable();
+
+                }
+                if (!string.IsNullOrEmpty(newSearches[2]))
+                {
+                    customerData = customerData.Where(s => (newSearches[2].ToLower().Contains(s.CallSource.ToLower()) || newSearches[2].ToLower().Contains(s.CallDestination.ToLower()))).AsQueryable();
+
+                }
+                if (!string.IsNullOrEmpty(newSearches[3]))
+                {
+                    customerData = customerData.Where(s => s.CallDuration.Value.Equals(double.Parse(newSearches[3]))).AsQueryable();
+
+                }
+
+                if (startDate != endDate)
+                {
+                    customerData = customerData.Where(s => s.Creation.Date >= startDate.Date && s.Creation.Date <= endDate.Date).AsQueryable();
+                }
+                else
+                {
+                    customerData = customerData.Where(s => s.Creation.Date >= DateTime.Now.Date && s.Creation.Date <= DateTime.Now.Date).AsQueryable();
+                }
+
+                    customerData = customerData.OrderByDescending(s => s.Creation).AsQueryable();
+                
+
+                var data = customerData.ToList();
+
+                return Ok(new { record=data});
             }
             catch (Exception ex)
             {

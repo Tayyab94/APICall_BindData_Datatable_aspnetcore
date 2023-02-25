@@ -1,5 +1,6 @@
 ﻿using Application.Entiries;
 using Application.Entiries.DataContext;
+using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
 
 namespace Application.Repositories
@@ -11,7 +12,8 @@ namespace Application.Repositories
         {
             _context = context;
         }
-       
+
+        public async Task<List<string>> ExtensionsList() =>await _context.Profiles.Select(s => s.Extension).Distinct().ToListAsync();
 
         Tuple<List<Profile>, int> IProfileRepository.GetAllProfiles(int page, string search)
         {

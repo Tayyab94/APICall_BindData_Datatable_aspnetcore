@@ -1,6 +1,8 @@
-﻿@{
-    ViewData["Title"] = "UserProfile";
+﻿
+@{
+    ViewData["Title"] = "AllProfilesList";
 }
+
 
 
 @section styles{
@@ -9,7 +11,7 @@
 
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-   
+
     <style>
 
         ::-webkit-scrollbar {
@@ -23,19 +25,19 @@
         }
 
         /*        .Profiles_filter {
-                    display:none !important;
-                }*/
+                            display:none !important;
+                        }*/
 
         .input-container {
             position: relative;
         }
 
         .clear-icon {
-            font-size:22px;
+            font-size: 22px;
             position: absolute;
             top: 21%;
-          /*  right: 10px;*/
-          left:-7px;
+            /*  right: 10px;*/
+            left: -7px;
             transform: translateY(-50%);
             cursor: pointer;
             visibility: hidden;
@@ -53,24 +55,25 @@
             transform: translateY(-50%);
             cursor: pointer;
         }
-    #demotags li{
-        margin-right:5px;
-        cursor:pointer;
-    }
 
-    input{
-        height:30px;
-    }
+        #demotags li {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        input {
+            height: 30px;
+        }
     </style>
 }
+
+
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div>
             <div class="divider"></div>
             <form class="g-3">
                 <div class="row" style="margin-bottom:10px; margin-top:10px">
-                    
-
                 </div>
                 <div class="row">
                     <div class="col-auto input-container">
@@ -85,7 +88,7 @@
                         <span class="clear-icon">&times;</span>
                         <div>
                             <ul id="demotags" style="display:flex; align-items:center; justify-content:center;list-style:none">
-                               <li data-value="Happy">#Happy</li>
+                                <li data-value="Happy">#Happy</li>
                                 <li data-value="Sad">#Sad</li>
                             </ul>
                         </div>
@@ -123,7 +126,7 @@
                         <button type="button" id="searchBtn" class="btn btn-primary mb-3">Submit</button>
                     </div>
                 </div>
-           
+
             </form>
         </div>
     </div>
@@ -135,7 +138,7 @@
                 <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
             </div>
             <div class="card-body profileCardBody" style="width: 100%;overflow-x: scroll;">
-                <table id="Profiles" class="table Profiles table-hover table-striped table-bordered dataTable dtr-inline" cellspacing="0" width="100%">
+                <table id="userProfiles" class="table Profiles table-hover table-striped table-bordered dataTable dtr-inline" cellspacing="0" width="100%">
                     <thead>
                         <tr style="height:120px">
                             <th> <span> Actions</span></th>
@@ -178,6 +181,8 @@
 </div>
 
 
+
+
 @section Scripts{
     @*  <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -185,6 +190,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+
+            //$("#userProfiles").DataTable({
+            //    "scrollX": true,
+            //});
+
+            // Initialize DataTable
+            //var table = $("#userProfiles").DataTable({
+            //    "scrollX": true,
+            //    "ordering": true
+            //});
+
+            
 
             $('#demotags li').on('click', function () {
                 const value = $(this).attr('data-value');
@@ -211,7 +228,7 @@
                 $(this).css('visibility', 'hidden');
             });
 
-            
+
 
             $('.my-select').select2();
 
@@ -235,30 +252,37 @@
 
 
             $("#searchBtn").click(function () {
-                //var searchvalue = $("#staticSearch").val()
                
-                // if ($("#tags").val()=== "" || $("#tags").val() == null) {
-                //    alert("Enter Tags")
-                //    return;
-                //}
-                //else if ($("#extensions").val() == "" || $("#extensions").val() == null) {
-                //    alert("Enter Extensions")
-                //    return;
-                //} else if (searchvalue == "" || searchvalue == null) {
-                //    alert("enter Search")
-                //    return;
-                //}
-                //else {
-                //    var newsearch = $("#tags").val() + "," + $("#extensions").val() + "," + $("#staticSearch").val();
-                //    //alert(newsearch);
-                //    GetData(newsearch, $("#hideDates").val());
-                //    $("#staticSearch").val("");
-                //    $(".profileCardBody").css("overflow-x", "hidden")
-                //    $(".Profiles_filter").css("display", "none !important")
-                //}
                 var newsearch = $("#tags").val() + "," + $("#extensions").val() + "," + $("#staticSearch").val() + "," + $("#durationSearch").val();
                 //alert(newsearch);
-                GetData(newsearch, $("#hideDates").val());
+                //GetData(newsearch, $("#hideDates").val());
+
+                // Fetch data using AJAX and add to table body
+                $.ajax({
+                    url: "/api/Profile/GetProfilesAll?name=" + newsearch + "&dt=" + $("#hideDates").val(),
+                    type: "POST",
+                    dataType: "JSON"
+                }).done(function (data) {
+                    //console.warn(data.record);
+                    $("#userProfiles tbody").empty();
+                    $.each(data.record, function (i, item) {
+                        console.warn(item.extension)
+                        var date = new Date(item.creation);
+                        var row = "<tr><td><button type=button class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + item.id + "><i class='fa fa-user'></i></button></td><td>" + item.reference + "</td><td>" + item.extension + "</td><td>" + date.toLocaleDateString() + "</td><td>" + item.aggression + "</td><td>" + item.arousal + "</td><td>" + item.atmosphere + "</td><td>" + item.clStress + "</td><td>" + item.concentration + "</td><td>" + item.discomfort + "</td><td>" + item.excitement + "</td><td>" + item.hesitation + "</td><td>" + item.imagination + "</td><td>" + item.joy + "</td><td>" + item.mentalEffort + "</td><td>" + item.sad + "</td><td>" + item.stress + "</td><td>" + item.uncertainty + "</td><td>" + item.uneasy + "</td><td>" + item.discomfortEnd + "</td><td>" + item.discomfortStart + "</td><td>" + item.tags + "</td><td>" + item.newTagsString + "</td><td>" + item.callDestination + "</td><td>" + item.callSource + "</td><td>" + item.startCall + "</td><td>" + item.finishCall + "</td><td>" + item.callDuration + "</td></tr>";
+                        //table.row.add($(row));
+                        $("#userProfiles tbody").append(row);
+                    });
+
+                    $("#userProfiles").DataTable({
+                        "scrollX": true,
+                        "ordering": true
+                    });
+
+                    //// Draw table with data
+                    //table.draw();
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus + ": " + errorThrown);
+                });
                 $("#staticSearch").val("");
                 $(".profileCardBody").css("overflow-x", "hidden")
                 $(".Profiles_filter").css("display", "none !important")
@@ -266,89 +290,28 @@
 
         })
 
-        function GetData(searchingValue, date) {
-            //alert(date)
-            if ($.fn.DataTable.isDataTable('#Profiles')) {
-                $('#Profiles').DataTable().destroy();
-            }
+        //function GetData(searchingValue, date) {
+            
+        //    //$("#userProfiles tbody").empty();
+        //    //$.ajax({
+        //    //    url: "/api/Profile/GetProfilesAll?name=" + searchingValue + "&dt=" + date,
+        //    //    type:"POST",
+        //    //    datatype:"JSON",
+                
+        //    //}).done(function(data){
+        //    //    // iterate over each object in the array and append a new row to the table
+        //    //    $.each(data, function (i, item) {
+        //    //        var date = new Date(data.creation);
 
-            if (!$.fn.dataTable.isDataTable('#Profiles')) {
-                table = $('#Profiles')
-                    .DataTable({
-                        "processing": true,
-                        "serverSide": true,
-                        "filter": true,
-                        "scrollX": true,
-                        'columnDefs': [{ 'orderable': false, 'targets': 0 }],
-                        "ajax": {
-                            "url": "/api/Profile/GetProfiles?name=" + searchingValue + "&dt=" + date,
-                            "type": "POST",
-                            "datatype": "json"
-                        },
-                        "columns": [
-
-                            {
-                                "data": "id", "name": "Id", "autoWidth": true, "render": function (id, type, full, meta) {
-
-                                    return "<button type='button' class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + full.id + " ><i class='fa fa-user'></i></button>";
-
-                                }
-                            },
-                            { "data": "reference", "name": "Reference", "autoWidth": true },
-                            { "data": "extension", "name": "Extension", "autoWidth": true },
-                            {
-                                "data": "creation", "name": "Creation", "autoWidth": true, "createdCell": function (td, cellData, rowData, row, col) {
-                                    var date = new Date(cellData);
-                                    $(td).html(date.toLocaleDateString());
-                                }
-                            },
-                            { "data": "aggression", "name": "Aggression", "autoWidth": true },
-                            { "data": "arousal", "name": "Arousal", "autoWidth": true },
-                            { "data": "atmosphere", "name": "Atmosphere", "autoWidth": true },
-
-                            { "data": "clStress", "name": "ClStress", "autoWidth": true },
-                            { "data": "concentration", "name": "Concentration", "autoWidth": true },
-                            { "data": "discomfort", "name": "Discomfort", "autoWidth": true },
-
-                            { "data": "excitement", "name": "Excitement", "autoWidth": true },
-                            { "data": "hesitation", "name": "Hesitation", "autoWidth": true },
-                            { "data": "imagination", "name": "Imagination", "autoWidth": true },
-                            { "data": "joy", "name": "joy", "AutoWidth": true },
-
-                            { "data": "mentalEffort", "name": "MentalEffort", "autoWidth": true },
-                            { "data": "sad", "name": "sad", "AutoWidth": true },
-                            { "data": "stress", "name": "Stress", "autoWidth": true },
-                            { "data": "uncertainty", "name": "Uncertainty", "AutoWidth": true },
+        //    //        var row = "<tr><td> <button type=button class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + data.id + " ><i class='fa fa-user'></i></button></td><td>" + item.reference + "</td><td>" + item.extension + "</td>  <td>" + date.toLocaleDateString() + "</td><td>" + item.aggression + "</td><td>" + item.arousal + "</td><td>" + item.atmosphere + "</td><td>" + item.clStress + "</td><td>" + item.concentration + "</td><td>" + item.discomfort + "</td><td>" + item.excitement + "</td><td>" + item.hesitation + "</td><td>" + item.imagination + "</td><td>" + item.joy + "</td><td>" + item.mentalEffort + "</td><td>" + item.uneasy + "</td><td>" + item.discomfortEnd + "</td><td>" + item.discomfortStart + "</td><td>" + item.tags + "</td><td>" + item.newTagsString + "</td><td>" + item.callDestination + "</td> <td>" + item.callSource + "</td><td>" + item.startCall + "</td><td>" + item.finishCall + "</td>  <td>" + item.callDuration + "</td></tr>";
+        //    //        $("#userProfiles tbody").append(row);
+        //    //    });
+               
+                
+        //    //})
 
 
-                            { "data": "uneasy", "name": "Uneasy", "autoWidth": true },
-                            { "data": "discomfortEnd", "name": "DiscomfortEnd", "AutoWidth": true },
-                            { "data": "discomfortStart", "name": "DiscomfortStart", "autoWidth": true },
-                            { "data": "tags", "name": "Tags", "AutoWidth": true },
-                            { "data": "newTagsString", "name": "NewTagsString", "AutoWidth": true },
 
-                            { "data": "callDestination", "name": "CallDestination", "autoWidth": true },
-                            { "data": "callSource", "name": "CallSource", "AutoWidth": true },
-                            { "data": "startCall", "name": "StartCall", "autoWidth": true },
-                            { "data": "finishCall", "name": "FinishCall", "AutoWidth": true },
-                            { "data": "callDuration", "name": "CallDuration", "AutoWidth": true },
-                        ], "initComplete": function () {
-                            $('#Profiles tbody').on('click', 'tr td.dt-view', function (e) {
-
-                                const clickedElement = $(e.target);
-                                var tr = clickedElement.closest('tr');
-                                var row = cmeTable.row(tr);
-                                var record = row.data();
-
-                                self.updateDocument(record);
-
-                            });
-                        }
-                    });
-            }
-
-            searchingValue = "";
-
-        }
+        //}
     </script>
 }

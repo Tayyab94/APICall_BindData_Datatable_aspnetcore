@@ -1,0 +1,317 @@
+﻿
+@{
+    ViewData["Title"] = "AllProfilesList";
+}
+
+
+
+@section styles{
+    @*    <link href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />*@
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+
+        ::-webkit-scrollbar {
+            height: 5px;
+            background-color: #f2f2f2;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #aaa;
+            border-radius: 10px;
+        }
+
+        /*        .Profiles_filter {
+                            display:none !important;
+                        }*/
+
+        .input-container {
+            position: relative;
+        }
+
+        .clear-icon {
+            font-size: 22px;
+            position: absolute;
+            top: 21%;
+            /*  right: 10px;*/
+            left: -7px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            visibility: hidden;
+        }
+
+            .clear-icon:hover {
+                color: red;
+            }
+
+        .select2-selection__clear {
+            font-size: 22px;
+            position: absolute;
+            top: 21%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        #demotags li {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        input {
+            height: 30px;
+        }
+    </style>
+}
+
+
+<div class="main-card mb-3 card">
+    <div class="card-body">
+        <div>
+            <div class="divider"></div>
+            <form class="g-3">
+                <div class="row" style="margin-bottom:10px; margin-top:10px">
+                </div>
+                <div class="row">
+                    <div class="col-auto input-container">
+                        <label for="tags" class="visually-hidden">Tags</label>
+                        <select name="tags" id="tags" class="form-control my-select">
+                            <option value="">- Select Tags -</option>
+                            <option value="Happy">Happy</option>
+                            <option value="Sad">Sad</option>
+                            <option value="tag1">Tag1</option>
+                            <option value="Tag3">Tag3</option>
+                        </select>
+                        <span class="clear-icon">&times;</span>
+                        <div>
+                            <ul id="demotags" style="display:flex; align-items:center; justify-content:center;list-style:none">
+                                <li data-value="Happy">#Happy</li>
+                                <li data-value="Sad">#Sad</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-auto input-container">
+                        <label for="extensions" class="visually-hidden">Extensions</label>
+                        <select name="extensions" id="extensions" class="form-control my-select">
+                            <option value="">- Select Extensions -</option>
+                            @foreach (var item in ViewBag.extensionList)
+                            {
+                                <option value=@item>@item</option>
+
+                            }
+                        </select>
+                        <span class="clear-icon">&times;</span>
+                    </div>
+
+                    <div class="col-auto input-container">
+                        <label for="durationSearch" class="visually-hidden">Duration</label>
+                        <input type="text" class="form-control" id="durationSearch" placeholder="Search by duration">
+                        <span class="clear-icon">&times;</span>
+                    </div>
+
+                    <div class="col-auto input-container">
+                        <label for="staticSearch" class="visually-hidden">Seaching</label>
+                        <input type="text" class="form-control" id="staticSearch" placeholder="Search Call Source/Destination">
+                        <span class="clear-icon">&times;</span>
+                    </div>
+                    <div class="col-auto">
+                        <label for="staticSearch" class="visually-hidden">Date</label>
+                        <input type="text" class="form-control" id="daterange" name="daterange" placeholder="From - To (Date Range)" />
+                        <input type="hidden" id="hideDates" />
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" id="searchBtn" class="btn btn-primary mb-3">Submit</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
+            </div>
+            <div class="card-body profileCardBody" style="width: 100%;overflow-x: scroll;">
+                <table id="userProfiles" class="table Profiles table-hover table-striped table-bordered dataTable dtr-inline" cellspacing="0" width="100%">
+                    <thead>
+                        <tr style="height:120px">
+                            <th> <span> Actions</span></th>
+                            <th><span>Reference</span></th>
+                            <th><span>Extension</span></th>
+                            <th><span>Creation</span></th>
+                            <th><span class="vertical">Aggression</span></th>
+                            <th><span class="vertical">Arousal</span></th>
+                            <th><span class="vertical">Atmosphere</span></th>
+                            <th><span class="vertical">ClStress</span></th>
+                            <th><span class="vertical">Concentration</span></th>
+                            <th><span class="vertical">Discomfort</span></th>
+                            <th><span class="vertical">Excitement</span></th>
+                            <th><span class="vertical">Hesitation</span></th>
+                            <th><span class="vertical">Imagination</span></th>
+                            <th><span class="vertical">Joy</span></th>
+                            <th><span class="vertical">MentalEffort</span></th>
+                            <th><span class="vertical">Sad</span></th>
+                            <th><span class="vertical">Stress</span></th>
+                            <th><span class="vertical">Uncertainty</span></th>
+                            <th><span class="vertical">Uneasy</span></th>
+                            <th><span class="vertical">DiscomfortEnd</span></th>
+                            <th><span class="vertical">DiscomfortStart</span></th>
+                            <th><span class="vertical">Tags</span></th>
+                            <th><span class="vertical">NewTagsString</span></th>
+                            <th><span class="vertical">Call Destination</span></th>
+                            <th><span class="vertical">Call Source</span></th>
+                            <th><span>Call Start</span></th>
+                            <th><span>Call End</span></th>
+                            <th><span>Call Duration</span></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+    @*  <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>*@
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            //$("#userProfiles").DataTable({
+            //    "scrollX": true,
+            //});
+
+            // Initialize DataTable
+            //var table = $("#userProfiles").DataTable({
+            //    "scrollX": true,
+            //    "ordering": true
+            //});
+
+            
+
+            $('#demotags li').on('click', function () {
+                const value = $(this).attr('data-value');
+                $("#tags").val(value).trigger('change');
+            });
+
+            const formFields = $('.form-control');
+            const clearIcons = $('.clear-icon');
+
+            formFields.on('input', function () {
+                const index = formFields.index(this);
+                const clearIcon = clearIcons.eq(index);
+                if ($(this).val()) {
+                    clearIcon.css('visibility', 'visible');
+                } else {
+                    clearIcon.css('visibility', 'hidden');
+                }
+            });
+
+            clearIcons.on('click', function () {
+                const index = clearIcons.index(this);
+                const formField = formFields.eq(index);
+                formField.val('');
+                $(this).css('visibility', 'hidden');
+            });
+
+
+
+            $('.my-select').select2();
+
+            var today = new Date();
+            var yyyy = today.getFullYear();
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var dd = String(today.getDate()).padStart(2, '0');
+            var formattedDate = yyyy + '-' + mm + '-' + dd;
+            $("#hideDates").val(formattedDate + " " + formattedDate)
+            var dd = "";
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left',
+                //startDate: "01/01/2023",
+                autoUpdateInput: false,
+            }, function (start, end, label) {
+                console.warn("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                dd = start.format('YYYY-MM-DD') + " " + end.format('YYYY-MM-DD');
+                $("#daterange").val(start.format('YYYY-MM-DD') + " " + end.format('YYYY-MM-DD'));
+                $("#hideDates").val(dd);
+            });
+
+
+            $("#searchBtn").click(function () {
+               
+                var newsearch = $("#tags").val() + "," + $("#extensions").val() + "," + $("#staticSearch").val() + "," + $("#durationSearch").val();
+                //alert(newsearch);
+                //GetData(newsearch, $("#hideDates").val());
+
+                // Fetch data using AJAX and add to table body
+                $.ajax({
+                    url: "/api/Profile/GetProfilesAll?name=" + newsearch + "&dt=" + $("#hideDates").val(),
+                    type: "POST",
+                    dataType: "JSON"
+                }).done(function (data) {
+                    //console.warn(data.record);
+                    $("#userProfiles tbody").empty();
+                    $.each(data.record, function (i, item) {
+                        console.warn(item.extension)
+                        var date = new Date(item.creation);
+                        var row = "<tr><td><button type=button class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + item.id + "><i class='fa fa-user'></i></button></td><td>" + item.reference + "</td><td>" + item.extension + "</td><td>" + date.toLocaleDateString() + "</td><td>" + item.aggression + "</td><td>" + item.arousal + "</td><td>" + item.atmosphere + "</td><td>" + item.clStress + "</td><td>" + item.concentration + "</td><td>" + item.discomfort + "</td><td>" + item.excitement + "</td><td>" + item.hesitation + "</td><td>" + item.imagination + "</td><td>" + item.joy + "</td><td>" + item.mentalEffort + "</td><td>" + item.sad + "</td><td>" + item.stress + "</td><td>" + item.uncertainty + "</td><td>" + item.uneasy + "</td><td>" + item.discomfortEnd + "</td><td>" + item.discomfortStart + "</td><td>" + item.tags + "</td><td>" + item.newTagsString + "</td><td>" + item.callDestination + "</td><td>" + item.callSource + "</td><td>" + item.startCall + "</td><td>" + item.finishCall + "</td><td>" + item.callDuration + "</td></tr>";
+                        //table.row.add($(row));
+                        $("#userProfiles tbody").append(row);
+                    });
+
+                    $("#userProfiles").DataTable({
+                        "scrollX": true,
+                        "ordering": true
+                    });
+
+                    //// Draw table with data
+                    //table.draw();
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus + ": " + errorThrown);
+                });
+                $("#staticSearch").val("");
+                $(".profileCardBody").css("overflow-x", "hidden")
+                $(".Profiles_filter").css("display", "none !important")
+            })
+
+        })
+
+        //function GetData(searchingValue, date) {
+            
+        //    //$("#userProfiles tbody").empty();
+        //    //$.ajax({
+        //    //    url: "/api/Profile/GetProfilesAll?name=" + searchingValue + "&dt=" + date,
+        //    //    type:"POST",
+        //    //    datatype:"JSON",
+                
+        //    //}).done(function(data){
+        //    //    // iterate over each object in the array and append a new row to the table
+        //    //    $.each(data, function (i, item) {
+        //    //        var date = new Date(data.creation);
+
+        //    //        var row = "<tr><td> <button type=button class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + data.id + " ><i class='fa fa-user'></i></button></td><td>" + item.reference + "</td><td>" + item.extension + "</td>  <td>" + date.toLocaleDateString() + "</td><td>" + item.aggression + "</td><td>" + item.arousal + "</td><td>" + item.atmosphere + "</td><td>" + item.clStress + "</td><td>" + item.concentration + "</td><td>" + item.discomfort + "</td><td>" + item.excitement + "</td><td>" + item.hesitation + "</td><td>" + item.imagination + "</td><td>" + item.joy + "</td><td>" + item.mentalEffort + "</td><td>" + item.uneasy + "</td><td>" + item.discomfortEnd + "</td><td>" + item.discomfortStart + "</td><td>" + item.tags + "</td><td>" + item.newTagsString + "</td><td>" + item.callDestination + "</td> <td>" + item.callSource + "</td><td>" + item.startCall + "</td><td>" + item.finishCall + "</td>  <td>" + item.callDuration + "</td></tr>";
+        //    //        $("#userProfiles tbody").append(row);
+        //    //    });
+               
+                
+        //    //})
+
+
+
+        //}
+    </script>
+}

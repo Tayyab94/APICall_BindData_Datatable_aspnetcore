@@ -172,7 +172,8 @@ namespace Application.Controllers.api
                 }
                 if (!string.IsNullOrEmpty(newSearches[3]))
                 {
-                    customerData = customerData.Where(s => s.CallDuration.Value.Equals(double.Parse(newSearches[3]))).AsQueryable();
+                    double vl = double.Parse(newSearches[3]);
+                    customerData = customerData.Where(s => s.CallDuration.Value.Equals(vl)).AsQueryable();
 
                 }
 

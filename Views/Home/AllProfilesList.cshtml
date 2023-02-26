@@ -33,11 +33,19 @@
         }
 
         .clear-icon {
-            font-size: 22px;
+          /*  font-size: 22px;
             position: absolute;
             top: 21%;
-            /*  right: 10px;*/
+            /*  right: 10px;
             left: -7px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            visibility: hidden;*/ 
+            font-size: 22px;
+            position: absolute;
+            top: 25%;
+          /*  right: -4px;*/
+             left: -7px; 
             transform: translateY(-50%);
             cursor: pointer;
             visibility: hidden;
@@ -47,15 +55,6 @@
                 color: red;
             }
 
-        .select2-selection__clear {
-            font-size: 22px;
-            position: absolute;
-            top: 21%;
-            right: 10px;
-            transform: translateY(-50%);
-            cursor: pointer;
-        }
-
         #demotags li {
             margin-right: 5px;
             cursor: pointer;
@@ -64,6 +63,51 @@
         input {
             height: 30px;
         }
+
+        .select-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .clear-icondrop {
+            font-size: 22px;
+            position: absolute;
+            left: -10px;
+            top: 22%;
+            transform: translateY(-50%);
+            padding: 0 8px;
+            cursor: pointer;
+
+        }
+
+            .clear-icondrop:hover {
+            color: red;
+        }
+            .clear-icondrop.hidden {
+            display: none;
+        }
+
+        .select-container1 {
+            position: relative;
+            display: inline-block;
+        }
+
+        .clear-icondrop1 {
+            font-size: 22px;
+            position: absolute;
+            left: -10px;
+            top: 22%;
+            transform: translateY(-50%);
+            padding: 0 8px;
+            cursor: pointer;
+        }
+
+            .clear-icondrop1:hover {
+            color: red;
+        }
+            .clear-icondrop1.hidden {
+                display: none;
+            }
     </style>
 }
 
@@ -74,26 +118,31 @@
             <div class="divider"></div>
             <form class="g-3">
                 <div class="row" style="margin-bottom:10px; margin-top:10px">
+
                 </div>
                 <div class="row">
-                    <div class="col-auto input-container">
+
+                    <div class="col-auto select-container">
                         <label for="tags" class="visually-hidden">Tags</label>
                         <select name="tags" id="tags" class="form-control my-select">
                             <option value="">- Select Tags -</option>
                             <option value="Happy">Happy</option>
                             <option value="Sad">Sad</option>
+                            <option value="Animal">Animal</option>
                             <option value="tag1">Tag1</option>
                             <option value="Tag3">Tag3</option>
                         </select>
-                        <span class="clear-icon">&times;</span>
+                        <span class="clear-icondrop">&times;</span>
                         <div>
                             <ul id="demotags" style="display:flex; align-items:center; justify-content:center;list-style:none">
+
                                 <li data-value="Happy">#Happy</li>
                                 <li data-value="Sad">#Sad</li>
+                                <li data-value="Animal">#Animal</li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-auto input-container">
+                    <div class="col-auto @*input-container*@ select-container1">
                         <label for="extensions" class="visually-hidden">Extensions</label>
                         <select name="extensions" id="extensions" class="form-control my-select">
                             <option value="">- Select Extensions -</option>
@@ -103,20 +152,22 @@
 
                             }
                         </select>
-                        <span class="clear-icon">&times;</span>
+                        <span class="clear-icondrop1">&times;</span>
                     </div>
+
 
                     <div class="col-auto input-container">
                         <label for="durationSearch" class="visually-hidden">Duration</label>
-                        <input type="text" class="form-control" id="durationSearch" placeholder="Search by duration">
+                        <input type="text" class="form-control inputtext" id="durationSearch" placeholder="Search by duration">
                         <span class="clear-icon">&times;</span>
                     </div>
 
                     <div class="col-auto input-container">
                         <label for="staticSearch" class="visually-hidden">Seaching</label>
-                        <input type="text" class="form-control" id="staticSearch" placeholder="Search Call Source/Destination">
+                        <input type="text" class="form-control inputtext" id="staticSearch" placeholder="Search Call Source/Destination">
                         <span class="clear-icon">&times;</span>
                     </div>
+                    <br />
                     <div class="col-auto">
                         <label for="staticSearch" class="visually-hidden">Date</label>
                         <input type="text" class="form-control" id="daterange" name="daterange" placeholder="From - To (Date Range)" />
@@ -191,16 +242,61 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            //$("#userProfiles").DataTable({
-            //    "scrollX": true,
-            //});
+            const select = $('#tags');
+            const clearIcon = $('.clear-icondrop');
 
-            // Initialize DataTable
-            //var table = $("#userProfiles").DataTable({
-            //    "scrollX": true,
-            //    "ordering": true
-            //});
+            // Hide the clear icon by default
+            clearIcon.addClass('hidden');
 
+            // Handle change event on the select element
+            select.on('change', () => {
+               
+                // Show the clear icon if the select element has a value
+                if (select.val() !== '') {
+                    clearIcon.removeClass('hidden');
+                } else {
+                    clearIcon.addClass('hidden');
+                }
+            });
+
+            // Handle click event on the clear icon
+            clearIcon.on('click', () => {
+                // Remove the selected option from the dropdown
+                select.val('').trigger('change');
+
+                // Hide the clear icon again
+                clearIcon.addClass('hidden');
+            });
+
+
+
+            const select1 = $('#extensions');
+            const clearIcon1 = $('.clear-icondrop1');
+
+            // Hide the clear icon by default
+            clearIcon1.addClass('hidden');
+
+            // Handle change event on the select element
+            select1.on('change', () => {
+
+                // Show the clear icon if the select element has a value
+                if (select1.val() !== '') {
+                    clearIcon1.removeClass('hidden');
+                } else {
+                    clearIcon1.addClass('hidden');
+                }
+            });
+
+            // Handle click event on the clear icon
+            clearIcon1.on('click', () => {
+                // Remove the selected option from the dropdown
+                select1.val('').trigger('change');
+
+                // Hide the clear icon again
+                clearIcon1.addClass('hidden');
+            });
+
+            
             
 
             $('#demotags li').on('click', function () {
@@ -208,12 +304,13 @@
                 $("#tags").val(value).trigger('change');
             });
 
-            const formFields = $('.form-control');
+            const formFields = $('.inputtext');
             const clearIcons = $('.clear-icon');
 
             formFields.on('input', function () {
                 const index = formFields.index(this);
                 const clearIcon = clearIcons.eq(index);
+               
                 if ($(this).val()) {
                     clearIcon.css('visibility', 'visible');
                 } else {

@@ -10,12 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Controllers
 {
-    public class HomeController : Controller
+    
+    public class PreviousHomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<PreviousHomeController> _logger;
         //private readonly AnalysisDbContext context;
         private readonly IProfileRepository _profileRepository;
-        public HomeController(ILogger<HomeController> logger, AnalysisDbContext context,IProfileRepository profileRepository)
+        public PreviousHomeController(ILogger<PreviousHomeController> logger, AnalysisDbContext context,IProfileRepository profileRepository)
         {
             //_logger = logger;
             //this.context = context;

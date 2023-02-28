@@ -30,5 +30,14 @@ namespace Application.Controllers
             return View();
         }
 
+        public async Task<ActionResult> ListofProfiles()
+        {
+            var entensionsList = await _profileRepository.ExtensionsList();
+            ViewBag.extensionList = entensionsList;
+            var data =await _profileRepository.GetProfiles();
+            
+            return View(data);  
+        }
+
     }
 }

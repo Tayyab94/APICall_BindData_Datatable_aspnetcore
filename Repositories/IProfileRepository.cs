@@ -7,5 +7,9 @@ namespace Application.Repositories
         Tuple<List<Profile>, int> GetAllProfiles(int page, string search);
 
         Task<List<string>> ExtensionsList();
+
+
+        Task<List<Profile>> GetProfiles();
+
     }
 }

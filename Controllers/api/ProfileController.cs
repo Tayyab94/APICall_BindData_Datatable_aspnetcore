@@ -91,11 +91,7 @@ namespace Application.Controllers.api
                     customerData = customerData.Where(s => newSearches[1].ToLower().Contains(s.Extension.ToLower())).AsQueryable();
 
                 }
-                //if (!string.IsNullOrEmpty(newSearches[2]))
-                //{
-                //    customerData = customerData.Where(s => (newSearches[2].ToLower().Contains(s.CallSource.ToLower()) || newSearches[2].ToLower().Contains(s.CallDestination.ToLower()))).Where(s => s.Creation.Date >= startDate.Date && s.Creation.Date <= endDate.Date).AsQueryable();
-
-                //}
+               
                 if (!string.IsNullOrEmpty(newSearches[2]))
                 {
                     customerData = customerData.Where(s => (newSearches[2].ToLower().Contains(s.CallSource.ToLower()) || newSearches[2].ToLower().Contains(s.CallDestination.ToLower()))).AsQueryable();
@@ -173,8 +169,7 @@ namespace Application.Controllers.api
                 if (!string.IsNullOrEmpty(newSearches[3]))
                 {
                     double vl = double.Parse(newSearches[3]);
-                    customerData = customerData.Where(s => s.CallDuration.Value.Equals(vl)).AsQueryable();
-
+                    customerData = customerData.Where(s => s.CallDuration.Value >= vl).AsQueryable();
                 }
 
                 if (startDate != endDate)

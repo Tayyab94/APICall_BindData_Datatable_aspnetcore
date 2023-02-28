@@ -1,9 +1,8 @@
-﻿
+﻿@model IEnumerable<Application.Entiries.Profile>
+
 @{
-    ViewData["Title"] = "AllProfilesList";
+    ViewData["Title"] = "ListofProfiles";
 }
-
-
 
 @section styles{
     @*    <link href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />*@
@@ -25,27 +24,27 @@
         }
 
         /*        .Profiles_filter {
-                            display:none !important;
-                        }*/
+                                    display:none !important;
+                                }*/
 
         .input-container {
             position: relative;
         }
 
         .clear-icon {
-          /*  font-size: 22px;
-            position: absolute;
-            top: 21%;
-            /*  right: 10px;
-            left: -7px;
-            transform: translateY(-50%);
-            cursor: pointer;
-            visibility: hidden;*/ 
+            /*  font-size: 22px;
+                    position: absolute;
+                    top: 21%;
+                    /*  right: 10px;
+                    left: -7px;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    visibility: hidden;*/
             font-size: 22px;
             position: absolute;
             top: 25%;
-          /*  right: -4px;*/
-             left: -7px; 
+            /*  right: -4px;*/
+            left: -7px;
             transform: translateY(-50%);
             cursor: pointer;
             visibility: hidden;
@@ -77,15 +76,15 @@
             transform: translateY(-50%);
             padding: 0 8px;
             cursor: pointer;
-
         }
 
             .clear-icondrop:hover {
-            color: red;
-        }
+                color: red;
+            }
+
             .clear-icondrop.hidden {
-            display: none;
-        }
+                display: none;
+            }
 
         .select-container1 {
             position: relative;
@@ -103,8 +102,9 @@
         }
 
             .clear-icondrop1:hover {
-            color: red;
-        }
+                color: red;
+            }
+
             .clear-icondrop1.hidden {
                 display: none;
             }
@@ -118,7 +118,6 @@
             <div class="divider"></div>
             <form class="g-3">
                 <div class="row" style="margin-bottom:10px; margin-top:10px">
-
                 </div>
                 <div class="row">
 
@@ -158,7 +157,7 @@
 
                     <div class="col-auto input-container">
                         <label for="durationSearch" class="visually-hidden">Duration</label>
-                        <input type="text" class="form-control inputtext" id="durationSearch" placeholder="Search by duration">
+                        <input type="number" min="1" class="form-control inputtext" id="durationSearch" placeholder="Search by duration">
                         <span class="clear-icon">&times;</span>
                     </div>
 
@@ -189,10 +188,10 @@
                 <h2 class="card-title">Profiles List => Its a dummy data enter in db.</h2>
             </div>
             <div class="card-body profileCardBody" style="width: 100%;overflow-x: scroll;">
-                <table id="userProfiles" class="table Profiles table-hover table-striped table-bordered dataTable dtr-inline" cellspacing="0" width="100%">
+                <table id="userProfiles11" class="table Profiles table-hover table-striped table-bordered dataTable dtr-inline" cellspacing="0" width="100%">
                     <thead>
                         <tr style="height:120px">
-                            <th> <span> Actions</span></th>
+                          @*  <th> <span> Actions</span></th>
                             <th><span>Reference</span></th>
                             <th><span>Extension</span></th>
                             <th><span>Creation</span></th>
@@ -219,11 +218,74 @@
                             <th><span class="vertical">Call Source</span></th>
                             <th><span>Call Start</span></th>
                             <th><span>Call End</span></th>
-                            <th><span>Call Duration</span></th>
+                            <th><span>Call Duration</span></th>*@
+
+                            <th style="" data-field="Id"><div class="th-inner sortable both"> Id</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Reference"><div class="th-inner sortable both"> Reference</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Extension"><div class="th-inner sortable both">Extension</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Creation"><div class="th-inner sortable both"><span class="vertical"> Creation</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Aggression"><div class="th-inner sortable both"><span class="vertical"> Aggression</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Arousal"><div class="th-inner sortable both"> <span class="vertical">Arousal</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Atmosphere"><div class="th-inner sortable both"><span class="vertical"> Atmosphere</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="ClStress"><div class="th-inner sortable both"><span class="vertical"> ClStress</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Concentration"><div class="th-inner sortable both"><span class="vertical"> Concentration</span></div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Discomfort"><div class="th-inner sortable both"><span class="vertical"> Discomfort</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Excitement"><div class="th-inner sortable both"><span class="vertical"> Excitement</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Hesitation"><div class="th-inner sortable both"><span class="vertical"> Hesitation</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Imagination"><div class="th-inner sortable both"><span class="vertical"> Imagination</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Joy"><div class="th-inner sortable both"> <span class="vertical">Joy</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="MentalEffort"><div class="th-inner sortable both"><span class="vertical"> MentalEffort</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Sad"><div class="th-inner sortable both"><span class="vertical"> Sad</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Stress"><div class="th-inner sortable both"><span class="vertical"> Stress</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Uncertainty"><div class="th-inner sortable both"><span class="vertical"> Uncertainty</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Uneasy"><div class="th-inner sortable both"><span class="vertical"> Uneasy</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="DiscomfortEnd"><div class="th-inner sortable both"><span class="vertical"> DiscomfortEnd</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="DiscomfortStart"><div class="th-inner sortable both"> <span class="vertical">DiscomfortStart</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Tags"><div class="th-inner sortable both"><span class="vertical">Tags</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="NewTagsString"><div class="th-inner sortable both"> <span class="vertical">NewTagsString</span></</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Uneasy"><div class="th-inner sortable both"> <span class="vertical"> Call Destination</span></div><div class="fht-cell"></div></th>
+                            <th style="" data-field="DiscomfortEnd"><div class="th-inner sortable both"> <span class="vertical"> Call Source</span></div><div class="fht-cell"></div></th>
+                            <th style="" data-field="DiscomfortStart"><div class="th-inner sortable both"> Call Start</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="Tags"><div class="th-inner sortable both"> Call End</div><div class="fht-cell"></div></th>
+                            <th style="" data-field="NewTagsString"><div class="th-inner sortable both"> Call duration</div><div class="fht-cell"></div></th>
 
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-index="0">
+                                <td>@item.Id</td>
+                                <td>@item.Reference</td>
+                                <td>@item.Extension</td>
+                                <td>@item.Creation.ToShortDateString()</td>
+                                <td>@item.Aggression</td>
+                                <td>@item.Arousal</td>
+                                <td>@item.Atmosphere</td>
+                                <td>@item.ClStress</td>
+                                <td>@item.Concentration</td>
+                                <td>@item.Discomfort</td>
+                                <td>@item.Excitement</td>
+                                <td>@item.Hesitation</td>
+                                <td>@item.Imagination</td>
+                                <td>@item.Joy</td>
+                                <td>@item.MentalEffort</td>
+                                <td>@item.Sad</td>
+                                <td>@item.Stress</td>
+                                <td>@item.Uncertainty</td>
+                                <td>@item.Uneasy</td>
+                                <td>@item.DiscomfortEnd</td>
+                                <td>@item.DiscomfortStart</td>
+                                <td>@item.Tags</td>
+                                <td>@item.NewTagsString</td>
+                                <td>@item.CallDestination</td>
+                                <td>@item.CallSource</td>
+                                <td>@item.StartCall</td>
+                                <td>@item.FinishCall</td>
+                                <td>@item.CallDuration</td>
+
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -250,7 +312,7 @@
 
             // Handle change event on the select element
             select.on('change', () => {
-               
+
                 // Show the clear icon if the select element has a value
                 if (select.val() !== '') {
                     clearIcon.removeClass('hidden');
@@ -296,8 +358,8 @@
                 clearIcon1.addClass('hidden');
             });
 
-            
-            
+
+
 
             $('#demotags li').on('click', function () {
                 const value = $(this).attr('data-value');
@@ -310,7 +372,7 @@
             formFields.on('input', function () {
                 const index = formFields.index(this);
                 const clearIcon = clearIcons.eq(index);
-               
+
                 if ($(this).val()) {
                     clearIcon.css('visibility', 'visible');
                 } else {
@@ -347,76 +409,41 @@
                 $("#hideDates").val(dd);
             });
 
+            $('#userProfiles11').DataTable({
+                "scrollX": true,
+                "ordering": true
+            });
+
 
             $("#searchBtn").click(function () {
-               
-                var newsearch = $("#tags").val() + "," + $("#extensions").val() + "," + $("#staticSearch").val() + "," + $("#durationSearch").val();
-                //alert(newsearch);
-                //GetData(newsearch, $("#hideDates").val());
-
-                // Fetch data using AJAX and add to table body
-                $.ajax({
-                    url: "/api/Profile/GetProfilesAll?name=" + newsearch + "&dt=" + $("#hideDates").val(),
-                    type: "POST",
-                    dataType: "JSON"
-                }).done(function (data) {
-                    //console.warn(data.record);
-                    if ($.fn.DataTable.isDataTable('#userProfiles')) {
-                        $('#userProfiles').DataTable().destroy();
+    
+                var dateRange = $("#daterange").val().split(" ");
+                var startDate = new Date(dateRange[0]);
+                var endDate = new Date(dateRange[1]);
+                console.warn("start Date => "+ Date.parse(startDate) + "End "+endDate)
+                
+                var source_destination = $("#staticSearch").val().toLowerCase();
+                var tag = $("#tags").val().toLowerCase();
+                var extension = $("#extensions").val().toLowerCase();
+                var duration = $("#durationSearch").val().toLowerCase();
+                $('#userProfiles11 tbody tr').each(function () {
+                    var rowtag = $(this).find('td:nth-child(22)').text().toLowerCase();
+                    var rowExtenstions = $(this).find('td:nth-child(3)').text().toLowerCase();
+                    var rowCallSource = $(this).find('td:nth-child(25)').text().toLowerCase();
+                    var rowCallDesitnation =$(this).find('td:nth-child(24)').text();
+                    var rowCallduration = parseInt($(this).find('td:nth-child(28)').text().toLowerCase());
+                    var rowCreating =new Date($(this).find('td:nth-child(4)').text().toLowerCase());
+                    if (($("#daterange").val() === '' || (rowCreating >= startDate && rowCreating <= endDate)) && (extension === '' || rowExtenstions === extension) && (duration === "" || rowCallduration >= parseInt(duration)) && (tag === "" || rowtag.includes(tag)) && (source_destination === "" || rowCallSource.includes(source_destination) || rowCallDesitnation.includes(source_destination))) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
                     }
-
-                    $("#userProfiles tbody").empty();
-                   
-                    $.each(data.record, function (i, item) {
-                        console.warn(item.extension)
-                        var date = new Date(item.creation);
-                        var row = "<tr><td><button type=button class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + item.id + "><i class='fa fa-user'></i></button></td><td>" + item.reference + "</td><td>" + item.extension + "</td><td>" + date.toLocaleDateString() + "</td><td>" + item.aggression + "</td><td>" + item.arousal + "</td><td>" + item.atmosphere + "</td><td>" + item.clStress + "</td><td>" + item.concentration + "</td><td>" + item.discomfort + "</td><td>" + item.excitement + "</td><td>" + item.hesitation + "</td><td>" + item.imagination + "</td><td>" + item.joy + "</td><td>" + item.mentalEffort + "</td><td>" + item.sad + "</td><td>" + item.stress + "</td><td>" + item.uncertainty + "</td><td>" + item.uneasy + "</td><td>" + item.discomfortEnd + "</td><td>" + item.discomfortStart + "</td><td>" + item.tags + "</td><td>" + item.newTagsString + "</td><td>" + item.callDestination + "</td><td>" + item.callSource + "</td><td>" + item.startCall + "</td><td>" + item.finishCall + "</td><td>" + item.callDuration + "</td></tr>";
-                       
-                        $("#userProfiles tbody").append(row);
-                    });
-
-                    $('#userProfiles').DataTable({
-                        "scrollX": true,
-                        "ordering": true
-                    });
-                    //$("#userProfiles").DataTable({
-                       
-                    //});
-
-                    //// Draw table with data
-                    //table.draw();
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus + ": " + errorThrown);
                 });
-                $("#staticSearch").val("");
-                $(".profileCardBody").css("overflow-x", "hidden")
-                $(".Profiles_filter").css("display", "none !important")
-            })
 
+                $('#userProfiles11').DataTable().draw();
+            })
         })
 
-        //function GetData(searchingValue, date) {
-            
-        //    //$("#userProfiles tbody").empty();
-        //    //$.ajax({
-        //    //    url: "/api/Profile/GetProfilesAll?name=" + searchingValue + "&dt=" + date,
-        //    //    type:"POST",
-        //    //    datatype:"JSON",
-                
-        //    //}).done(function(data){
-        //    //    // iterate over each object in the array and append a new row to the table
-        //    //    $.each(data, function (i, item) {
-        //    //        var date = new Date(data.creation);
-
-        //    //        var row = "<tr><td> <button type=button class='btn btn-outline-info waves-effect waves-light editbtn-product' title='Details' data-product-id=" + data.id + " ><i class='fa fa-user'></i></button></td><td>" + item.reference + "</td><td>" + item.extension + "</td>  <td>" + date.toLocaleDateString() + "</td><td>" + item.aggression + "</td><td>" + item.arousal + "</td><td>" + item.atmosphere + "</td><td>" + item.clStress + "</td><td>" + item.concentration + "</td><td>" + item.discomfort + "</td><td>" + item.excitement + "</td><td>" + item.hesitation + "</td><td>" + item.imagination + "</td><td>" + item.joy + "</td><td>" + item.mentalEffort + "</td><td>" + item.uneasy + "</td><td>" + item.discomfortEnd + "</td><td>" + item.discomfortStart + "</td><td>" + item.tags + "</td><td>" + item.newTagsString + "</td><td>" + item.callDestination + "</td> <td>" + item.callSource + "</td><td>" + item.startCall + "</td><td>" + item.finishCall + "</td>  <td>" + item.callDuration + "</td></tr>";
-        //    //        $("#userProfiles tbody").append(row);
-        //    //    });
-               
-                
-        //    //})
-
-
-
-        //}
+           
     </script>
 }

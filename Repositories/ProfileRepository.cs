@@ -15,6 +15,11 @@ namespace Application.Repositories
 
         public async Task<List<string>> ExtensionsList() =>await _context.Profiles.Select(s => s.Extension).Distinct().ToListAsync();
 
+        public async Task<List<Profile>> GetProfiles()
+        {
+           return await _context.Profiles.ToListAsync();
+        }
+
         Tuple<List<Profile>, int> IProfileRepository.GetAllProfiles(int page, string search)
         {
             int pageSize = 1;
